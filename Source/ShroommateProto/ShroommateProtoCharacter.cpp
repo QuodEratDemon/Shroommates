@@ -62,7 +62,10 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	justJumped = false;
 	wallRate = 0.05f;
 	timeSinceWallJump = 40.0f;
-	
+	skillpoints = 3;
+	agility1 = false;
+	agility2 = false;
+	agility3 = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -74,6 +77,7 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AShroommateProtoCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AShroommateProtoCharacter::MoveRight);
@@ -100,6 +104,7 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 
 
 }
+
 
 
 void AShroommateProtoCharacter::OnResetVR()
