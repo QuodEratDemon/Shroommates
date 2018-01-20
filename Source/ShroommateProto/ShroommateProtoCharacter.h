@@ -47,23 +47,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	bool canWall = false;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-	int skillpoints;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-	bool agility1;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-	bool agility2;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-	bool agility3;
 
 protected:
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
-
 
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
