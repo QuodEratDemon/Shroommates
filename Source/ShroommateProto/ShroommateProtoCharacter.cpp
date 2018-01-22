@@ -1,6 +1,7 @@
 // Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
 #include "ShroommateProtoCharacter.h"
+#include "SkillTreeController.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -64,7 +65,12 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	justJumped = false;
 	wallRate = 0.05f;
 	timeSinceWallJump = 40.0f;
-	
+
+	//Skill tree stuff
+	skillpoints = 3;
+	agility1 = false;
+	agility2 = false;
+	agility3 = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -77,6 +83,7 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 
 	PlayerInputComponent->BindAction("Save", IE_Pressed, this, &AShroommateProtoCharacter::SaveGame);
 	PlayerInputComponent->BindAction("Load", IE_Pressed, this, &AShroommateProtoCharacter::LoadGame);
+	PlayerInputComponent->BindAction("OpenSkillTree", IE_Pressed, this, &AShroommateProtoCharacter::OpenSkillTree);
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
@@ -106,6 +113,24 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 
 
 }
+
+//Does stuff at "on start"
+void AShroommateProtoCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	//casting pointer to SkillTreeController reference
+	a = Cast<ASkillTreeController>(Controller);
+}
+
+//Calls SkilltreeController function when you press U-key
+void AShroommateProtoCharacter::OpenSkillTree()
+{
+	//if a is not NULL, it calls BeginPlay() in SKillTreeController and it spawns the skill tree UI
+	if (a) {
+		a->BeginPlay();
+	}
+}
+
 
 
 void AShroommateProtoCharacter::OnResetVR()
