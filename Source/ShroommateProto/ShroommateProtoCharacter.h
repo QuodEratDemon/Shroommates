@@ -47,8 +47,27 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	bool canWall = false;
 
+	//Skill Tree stuff
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int skillpoints;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool agility1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool agility2;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool agility3;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		class ASkillTreeController* a;
 
 protected:
+
+	virtual void BeginPlay() override;
+
+	//Calls SkilltreeController function when you press U-key
+	void OpenSkillTree();
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
