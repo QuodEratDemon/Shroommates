@@ -23,7 +23,14 @@ public:
 
 	UUserWidget* MySkillTree;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool insidebuyupgradezone;
+
 	//override BeginPlay() function in UserWidget
 	virtual void BeginPlay() override;
 	
+	UFUNCTION()
+		void setzone();
+	UFUNCTION()
+		void freezone();
 };
