@@ -62,6 +62,7 @@ void AGrowtest::Tick(float DeltaTime)
 	if (consume && inConsumeRange && !eaten) {
 		FVector NewScale = contact->GetActorScale();
 		contact->SetActorRelativeScale3D(NewScale + FVector(0.005f, 0.005f, 0.005f));
+		
 		AShroommateProtoCharacter* tempChar = Cast<AShroommateProtoCharacter>(contact);
 		UQualities3* tempq = tempChar->FindComponentByClass<UQualities3>();
 
