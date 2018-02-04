@@ -51,7 +51,7 @@ void AGrowtest::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	Controller = GetWorld()->GetFirstPlayerController();
 	if (Controller != NULL) {
-		if (Controller->IsInputKeyDown(EKeys::F)) {
+		if (Controller->IsInputKeyDown(EKeys::E)) {
 			consume = 1;
 		}
 		else {
