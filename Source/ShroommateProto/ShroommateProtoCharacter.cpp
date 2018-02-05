@@ -67,10 +67,13 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	timeSinceWallJump = 40.0f;
 
 	//Skill tree stuff
-	skillpoints = 3;
+	skillpoints = 6;
 	agility1 = false;
 	agility2 = false;
 	agility3 = false;
+	jump1 = false;
+	jump2 = false;
+	jump3 = false;
 }
 
 //////////////////////////////////////////////////////////////////////////

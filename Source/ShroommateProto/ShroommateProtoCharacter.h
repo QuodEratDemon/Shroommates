@@ -60,6 +60,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool agility3;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool jump1;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool jump2;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool jump3;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		class ASkillTreeController* a;
 
 protected:
