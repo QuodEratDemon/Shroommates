@@ -51,7 +51,7 @@ void AGrowtest::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	Controller = GetWorld()->GetFirstPlayerController();
 	if (Controller != NULL) {
-		if (Controller->IsInputKeyDown(EKeys::F)) {
+		if (Controller->IsInputKeyDown(EKeys::E)) {
 			consume = 1;
 		}
 		else {
@@ -62,6 +62,7 @@ void AGrowtest::Tick(float DeltaTime)
 	if (consume && inConsumeRange && !eaten) {
 		FVector NewScale = contact->GetActorScale();
 		contact->SetActorRelativeScale3D(NewScale + FVector(0.005f, 0.005f, 0.005f));
+		
 		AShroommateProtoCharacter* tempChar = Cast<AShroommateProtoCharacter>(contact);
 		UQualities3* tempq = tempChar->FindComponentByClass<UQualities3>();
 

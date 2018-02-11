@@ -1,6 +1,7 @@
 // Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
 #include "ShroommateProtoCharacter.h"
+#include "SkillTreeController.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -8,6 +9,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "MySaveGame.h"
+
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Blue,text)
 
@@ -62,7 +65,15 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	justJumped = false;
 	wallRate = 0.05f;
 	timeSinceWallJump = 40.0f;
-	
+
+	//Skill tree stuff
+	skillpoints = 6;
+	agility1 = false;
+	agility2 = false;
+	agility3 = false;
+	jump1 = false;
+	jump2 = false;
+	jump3 = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -72,6 +83,11 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
+
+	PlayerInputComponent->BindAction("Save", IE_Pressed, this, &AShroommateProtoCharacter::SaveGame);
+	PlayerInputComponent->BindAction("Load", IE_Pressed, this, &AShroommateProtoCharacter::LoadGame);
+	PlayerInputComponent->BindAction("OpenSkillTree", IE_Pressed, this, &AShroommateProtoCharacter::OpenSkillTree);
+
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
@@ -100,6 +116,24 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 
 
 }
+
+//Does stuff at "on start"
+void AShroommateProtoCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	//casting pointer to SkillTreeController reference
+	a = Cast<ASkillTreeController>(Controller);
+}
+
+//Calls SkilltreeController function when you press U-key
+void AShroommateProtoCharacter::OpenSkillTree()
+{
+	//if a is not NULL, it calls BeginPlay() in SKillTreeController and it spawns the skill tree UI
+	if (a) {
+		a->BeginPlay();
+	}
+}
+
 
 
 void AShroommateProtoCharacter::OnResetVR()
@@ -212,8 +246,28 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 	else {
 		justJumped = false;
 	}
+}
 
+void AShroommateProtoCharacter::SaveGame()
+{
+	//instance of the savegame class
+	UMySaveGame* SaveGameInstance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass()));
+	//Set the save game instance location equal to the players current location
+	SaveGameInstance->PlayerLocation = this->GetActorLocation();
+	//Save the savegameinstance
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("MySlot"), 0);
+	//debug
+	//GEngine->AddOnScreenDebugMessage(-1, 5f, FColor:Red, TEXT("Game Saved"));
+}
 
-
-
+void AShroommateProtoCharacter::LoadGame()
+{
+	//instance of the savegame class
+	UMySaveGame* SaveGameInstance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass()));
+	//Load the saved game into our savegameinstance variable
+	SaveGameInstance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot("MySlot", 0));
+	//set the players position from the saved game file
+	this->SetActorLocation(SaveGameInstance->PlayerLocation);
+	//debug
+	//GEngine->AddOnScreenDebugMessage(-1, 5f, FColor:Red, TEXT("Game Loaded"));
 }
