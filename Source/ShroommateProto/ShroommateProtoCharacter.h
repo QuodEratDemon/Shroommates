@@ -68,12 +68,18 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		class ASkillTreeController* a;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool canclimb;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool walkagain;
+
 protected:
 
 	virtual void BeginPlay() override;
 
 	//Calls SkilltreeController function when you press U-key
 	void OpenSkillTree();
+
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
@@ -120,5 +126,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void SetClimb(bool b);
 };
 
