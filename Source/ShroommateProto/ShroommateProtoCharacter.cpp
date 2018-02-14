@@ -75,6 +75,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	jump2 = false;
 	jump3 = false;
 
+
 	//jump setting
 	jump_height = 3000.f;
 	jump_gravity = 3.5f;
@@ -83,6 +84,10 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	GetCharacterMovement()->JumpZVelocity = jump_height;
 	GetCharacterMovement()->AirControl = jump_control;
 	GetCharacterMovement()->GravityScale = jump_gravity;
+
+
+	canclimb = false;
+	walkagain = false;
 
 }
 
@@ -144,6 +149,11 @@ void AShroommateProtoCharacter::OpenSkillTree()
 	}
 }
 
+void AShroommateProtoCharacter::SetClimb(bool b)
+{
+	canclimb = b;
+}
+
 
 
 void AShroommateProtoCharacter::OnResetVR()
@@ -180,14 +190,28 @@ void AShroommateProtoCharacter::MoveForward(float Value)
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
 		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get forward vector
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		if (onWall) Value = 0;
-		AddMovementInput(Direction, Value);
-
+		if (!canclimb) {
+			const FRotator Rotation = Controller->GetControlRotation();
+			const FRotator YawRotation(0, Rotation.Yaw, 0);
+			// get forward vector
+			if (walkagain) {
+				GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+				walkagain = false;
+			}
+			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+			if (onWall) Value = 0;
+			AddMovementInput(Direction, Value);
+		}
+		else if(canclimb){
+			const FRotator Rotation = Controller->GetControlRotation();
+			const FRotator YawRotation(-1, Rotation.Yaw, 0);
+			// get forward vector
+			GetCharacterMovement()->SetMovementMode(MOVE_Flying);
+			walkagain = true;
+			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Z);
+			if (onWall) Value = 0;
+			AddMovementInput(Direction, Value);
+		}
 		
 	}
 	
@@ -203,8 +227,11 @@ void AShroommateProtoCharacter::MoveRight(float Value)
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-	
 		// get right vector 
+		if (walkagain) {
+			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+			walkagain = false;
+		}
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
 		if (onWall) Value = 0;
