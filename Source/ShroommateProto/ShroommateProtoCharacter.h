@@ -68,10 +68,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		class ASkillTreeController* a;
 
+
+	//jump
+	float jump_gravity;
+	float jump_height;
+	float jump_control;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool canclimb;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool walkagain;
+
 
 protected:
 
