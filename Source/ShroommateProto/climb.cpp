@@ -39,6 +39,8 @@ void Aclimb::Tick(float DeltaTime)
 	if (insidezone == false && objectinzone != nullptr) {
 		AShroommateProtoCharacter* tempChar = Cast<AShroommateProtoCharacter>(objectinzone);
 		tempChar->SetClimb(false);
+		objectinzone = nullptr;
+		tempChar = nullptr;
 	}
 }
 
