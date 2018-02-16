@@ -2,6 +2,7 @@
 
 #include "Qualities3.h"
 #include "ShroommateProtoCharacter.h"
+#include <math.h> 
 /*#define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White,text)
 #define print2(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Purple,text)
 #define print3(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
@@ -39,6 +40,7 @@ void UQualities3::BeginPlay()
 void UQualities3::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
 
 	//Player Scaling
 	FVector NewScale = player->GetActorScale();
@@ -146,7 +148,7 @@ int UQualities3::qualityHunger(float q) {
 	return Qstate;
 }
 
-//AG 10/14/17: Adding function that determines if player should grow or shrink and by how much
+
 float UQualities3::growthRate() {
 
 
@@ -154,9 +156,9 @@ float UQualities3::growthRate() {
 	int humState = qualityState(humidity);
 	int hunState = qualityState(hunger);//Hunger(hunger);
 	int ligState = qualityState(light);
+   
 
 	int state = humState + hunState + ligState;
-
 	if (state == -3) {
 		return -.0001; //-y=(.02)^1.1
 	}
@@ -170,13 +172,16 @@ float UQualities3::growthRate() {
 		return 0;
 	}
 	else if (state == 1) {
-		return .00004;//.00001; //y=(.02)^(1/1.1)
+		return log(getCurSize()+0.5f) * .00003;
+		//return .00004;//.00001; //y=(.02)^(1/1.1)
 	}
 	else if (state == 2) {
-		return .00007;//.00004; //y=(.02)
+		return log(getCurSize() + 0.5f) * .00005;
+		//return .00007;//.00004; //y=(.02)
 	}
 	else {
-		return .0001; //if (state == 3)  //y=(.02)^1.1
+		return log(getCurSize() + 0.5f) * .00006;
+		//return .0001; //if (state == 3)  //y=(.02)^1.1
 	}
 }
 
