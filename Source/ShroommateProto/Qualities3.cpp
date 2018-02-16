@@ -43,14 +43,20 @@ void UQualities3::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 
 
 	//Player Scaling
-	FVector NewScale = player->GetActorScale();
-	float growthAmount = growthRate();
-	if (NewScale.X + growthAmount > .1) player->SetActorRelativeScale3D(NewScale + FVector(growthAmount, growthAmount, growthAmount));
+	timeTick += DeltaTime;
+	FVector NewScale;
+	float growthAmount;
+	if (timeTick >= 0.017) {
+		NewScale = player->GetActorScale();
+		growthAmount = growthRate();
+		if (NewScale.X + growthAmount > .1) player->SetActorRelativeScale3D(NewScale + FVector(growthAmount, growthAmount, growthAmount));
 
-	//Decay qualities
-	addToLight(-decayRate);
-	addToHunger(-decayRate);
-	addToHumidity(-decayRate);
+		//Decay qualities
+		addToLight(-decayRate);
+		addToHunger(-decayRate);
+		addToHumidity(-decayRate);
+		timeTick = 0;
+	}
 
 	//Update size scores
 	curSize = NewScale.X;
