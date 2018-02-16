@@ -30,6 +30,8 @@ class SHROOMMATEPROTO_API UQualities3 : public UActorComponent
 	UPROPERTY(EditAnywhere, Category = "Qualities")
 		float largestSize = 0; //AG 10/14/17: player's largest size ever
 
+	float timeTick = 0;
+
 public:
 	// Sets default values for this component's properties
 	UQualities3();
