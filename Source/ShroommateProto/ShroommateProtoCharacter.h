@@ -69,6 +69,22 @@ public:
 		class ASkillTreeController* a;
 
 
+	//UI stuff 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		float MaxHealth;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		float CurrentHealth;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		float MaxWater;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		float CurrentWater;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int Currency;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int State;
+
+
+
 	//jump
 	float jump_gravity;
 	float jump_height;
@@ -134,5 +150,20 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void SetClimb(bool b);
+
+	//UI
+	void setMaxHealth(float MH);
+	void setCurrentHealth(float CH);
+	void setMaxWater(float MW);
+	void setCurrentwater(float CW);
+	void setCurrency(int C);
+	void setState(int S);
+
+	float getMaxHealth();
+	float getCurrentHealth();
+	float getMaxWater();
+	float getCurrentWater();
+	int getCurrency();
+	int getState();
 };
 
