@@ -35,8 +35,8 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
-	GetCharacterMovement()->JumpZVelocity = 600.f;
-	GetCharacterMovement()->AirControl = 0.2f;
+	//GetCharacterMovement()->JumpZVelocity = 600.f;
+	//GetCharacterMovement()->AirControl = 0.2f;
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -87,7 +87,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 
 	//jump setting
 	jump_height = 3000.f;
-	jump_gravity = 3.5f;
+	jump_gravity = 10.0f;
 	jump_control = 0.2f;
 
 	GetCharacterMovement()->JumpZVelocity = jump_height;
@@ -174,7 +174,11 @@ void AShroommateProtoCharacter::OnResetVR()
 
 void AShroommateProtoCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
 {
-	
+	/*
+	GetCharacterMovement()->JumpZVelocity = jump_height;
+	GetCharacterMovement()->AirControl = jump_control;
+	GetCharacterMovement()->GravityScale = jump_gravity;
+	*/
 
 	Jump();
 }
