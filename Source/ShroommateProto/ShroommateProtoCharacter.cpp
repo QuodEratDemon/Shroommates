@@ -75,6 +75,15 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	jump2 = false;
 	jump3 = false;
 
+	//UI
+	MaxHealth = 3;
+	CurrentHealth = 3;
+	MaxWater = 100;
+	CurrentWater = 70;
+	Currency = 0;
+	State = 2;
+
+
 
 	//jump setting
 	jump_height = 3000.f;
@@ -88,6 +97,8 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 
 	canclimb = false;
 	walkagain = false;
+
+	
 
 }
 
@@ -313,4 +324,42 @@ void AShroommateProtoCharacter::LoadGame()
 	this->SetActorLocation(SaveGameInstance->PlayerLocation);
 	//debug
 	//GEngine->AddOnScreenDebugMessage(-1, 5f, FColor:Red, TEXT("Game Loaded"));
+}
+
+void AShroommateProtoCharacter::setMaxHealth(float MH) {
+	MaxHealth = MH;
+}
+void AShroommateProtoCharacter::setCurrentHealth(float CH) {
+	CurrentHealth = CH;
+}
+void AShroommateProtoCharacter::setMaxWater(float MW) {
+	MaxWater = MW;
+}
+void AShroommateProtoCharacter::setCurrentwater(float CW) {
+	CurrentWater = CW;
+}
+void AShroommateProtoCharacter::setCurrency(int C) {
+	Currency = C;
+}
+void AShroommateProtoCharacter::setState(int S) {
+	State = S;
+}
+
+float AShroommateProtoCharacter::getMaxHealth() {
+	return MaxHealth;
+}
+float AShroommateProtoCharacter::getCurrentHealth() {
+	return CurrentHealth;
+}
+float AShroommateProtoCharacter::getMaxWater() {
+	return MaxWater;
+}
+float AShroommateProtoCharacter::getCurrentWater() {
+	return CurrentWater;
+}
+int AShroommateProtoCharacter::getCurrency() {
+	return Currency;
+}
+int AShroommateProtoCharacter::getState() {
+	return State;
 }
