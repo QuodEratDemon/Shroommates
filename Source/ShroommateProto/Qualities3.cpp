@@ -44,23 +44,24 @@ void UQualities3::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 
 	//Player Scaling
 	timeTick += DeltaTime;
-	FVector NewScale;
-	float growthAmount;
+	FVector NewScale = player->GetActorScale();
+	float growthAmount = growthRate();;
 	if (timeTick >= 0.017) {
-		NewScale = player->GetActorScale();
-		growthAmount = growthRate();
 		if (NewScale.X + growthAmount > .1) player->SetActorRelativeScale3D(NewScale + FVector(growthAmount, growthAmount, growthAmount));
 
 		//Decay qualities
 		addToLight(-decayRate);
 		addToHunger(-decayRate);
 		addToHumidity(-decayRate);
+
+		curSize = NewScale.X;
+		if (curSize > largestSize) largestSize = curSize;
+
 		timeTick = 0;
 	}
 
 	//Update size scores
-	curSize = NewScale.X;
-	if (curSize > largestSize) largestSize = curSize;
+	
 
 	AShroommateProtoCharacter* tempChar = Cast<AShroommateProtoCharacter>(player);
 	USpringArmComponent* tempCam = tempChar->GetCameraBoom();
