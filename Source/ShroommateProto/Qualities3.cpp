@@ -163,6 +163,7 @@ float UQualities3::growthRate() {
 	int humState = qualityState(humidity);
 	int hunState = qualityState(hunger);//Hunger(hunger);
 	int ligState = qualityState(light);
+   
 
 
 	int state = humState + hunState + ligState;

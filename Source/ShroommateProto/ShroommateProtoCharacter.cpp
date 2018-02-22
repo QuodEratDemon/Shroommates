@@ -172,7 +172,11 @@ void AShroommateProtoCharacter::OnResetVR()
 
 void AShroommateProtoCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
 {
-	
+	/*
+	GetCharacterMovement()->JumpZVelocity = jump_height;
+	GetCharacterMovement()->AirControl = jump_control;
+	GetCharacterMovement()->GravityScale = jump_gravity;
+	*/
 
 	Jump();
 }
