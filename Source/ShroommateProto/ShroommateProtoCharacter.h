@@ -83,21 +83,6 @@ public:
 		int State;
 
 
-	//UI stuff 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-		float MaxHealth;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-		float CurrentHealth;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-		float MaxWater;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-		float CurrentWater;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-		int Currency;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-		int State;
-
-
 
 	//jump
 	float jump_gravity;
@@ -121,6 +106,8 @@ protected:
 	//Calls SkilltreeController function when you press U-key
 	void OpenSkillTree();
 
+	//Calls SkilltreeController function when you press E-key
+	void OpenStore();
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();

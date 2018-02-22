@@ -111,6 +111,7 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 	PlayerInputComponent->BindAction("Save", IE_Pressed, this, &AShroommateProtoCharacter::SaveGame);
 	PlayerInputComponent->BindAction("Load", IE_Pressed, this, &AShroommateProtoCharacter::LoadGame);
 	PlayerInputComponent->BindAction("OpenSkillTree", IE_Pressed, this, &AShroommateProtoCharacter::OpenSkillTree);
+	PlayerInputComponent->BindAction("OpenStore", IE_Pressed, this, &AShroommateProtoCharacter::OpenStore);
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
@@ -154,7 +155,15 @@ void AShroommateProtoCharacter::OpenSkillTree()
 {
 	//if a is not NULL, it calls BeginPlay() in SKillTreeController and it spawns the skill tree UI
 	if (a) {
-		a->BeginPlay();
+		a->accessskill();
+	}
+}
+//Calls SkilltreeController function when you press E-key
+void AShroommateProtoCharacter::OpenStore()
+{
+	//if a is not NULL, it calls accessstore() in SKillTreeController and it spawns the store UI
+	if (a) {
+		a->accessstore();
 	}
 }
 
