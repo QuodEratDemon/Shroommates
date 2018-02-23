@@ -68,8 +68,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		class ASkillTreeController* a;
 
-
-	//UI stuff 
+	//UI stuff
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		float MaxHealth;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
@@ -94,6 +93,10 @@ public:
 		bool canclimb;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool walkagain;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool movingW;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool movingR;
 
 
 protected:
@@ -103,6 +106,8 @@ protected:
 	//Calls SkilltreeController function when you press U-key
 	void OpenSkillTree();
 
+	//Calls SkilltreeController function when you press E-key
+	void OpenStore();
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();

@@ -61,7 +61,7 @@ void UQualities3::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	}
 
 	//Update size scores
-	
+
 
 	AShroommateProtoCharacter* tempChar = Cast<AShroommateProtoCharacter>(player);
 	USpringArmComponent* tempCam = tempChar->GetCameraBoom();
@@ -165,6 +165,7 @@ float UQualities3::growthRate() {
 	int ligState = qualityState(light);
    
 
+
 	int state = humState + hunState + ligState;
 	if (state == -3) {
 		return -.0001; //-y=(.02)^1.1
@@ -179,7 +180,7 @@ float UQualities3::growthRate() {
 		return 0;
 	}
 	else if (state == 1) {
-		return log(getCurSize()+0.5f) * .00003;
+		return log(getCurSize() + 0.5f) * .00003;
 		//return .00004;//.00001; //y=(.02)^(1/1.1)
 	}
 	else if (state == 2) {

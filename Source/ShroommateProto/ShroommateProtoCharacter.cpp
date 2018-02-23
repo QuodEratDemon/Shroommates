@@ -84,7 +84,6 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	State = 2;
 
 
-
 	//jump setting
 	jump_height = 3000.f;
 	jump_gravity = 10.0f;
@@ -97,9 +96,8 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 
 	canclimb = false;
 	walkagain = false;
-
-	
-
+	movingW = false;
+	movingR = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -113,6 +111,7 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 	PlayerInputComponent->BindAction("Save", IE_Pressed, this, &AShroommateProtoCharacter::SaveGame);
 	PlayerInputComponent->BindAction("Load", IE_Pressed, this, &AShroommateProtoCharacter::LoadGame);
 	PlayerInputComponent->BindAction("OpenSkillTree", IE_Pressed, this, &AShroommateProtoCharacter::OpenSkillTree);
+	PlayerInputComponent->BindAction("OpenStore", IE_Pressed, this, &AShroommateProtoCharacter::OpenStore);
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
@@ -156,7 +155,15 @@ void AShroommateProtoCharacter::OpenSkillTree()
 {
 	//if a is not NULL, it calls BeginPlay() in SKillTreeController and it spawns the skill tree UI
 	if (a) {
-		a->BeginPlay();
+		a->accessskill();
+	}
+}
+//Calls SkilltreeController function when you press E-key
+void AShroommateProtoCharacter::OpenStore()
+{
+	//if a is not NULL, it calls accessstore() in SKillTreeController and it spawns the store UI
+	if (a) {
+		a->accessstore();
 	}
 }
 
@@ -204,6 +211,7 @@ void AShroommateProtoCharacter::MoveForward(float Value)
 {
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
+		movingW = true;
 		// find out which way is forward
 		if (!canclimb) {
 			const FRotator Rotation = Controller->GetControlRotation();
@@ -220,14 +228,20 @@ void AShroommateProtoCharacter::MoveForward(float Value)
 		else if(canclimb){
 			const FRotator Rotation = Controller->GetControlRotation();
 			const FRotator YawRotation(-1, Rotation.Yaw, 0);
-			// get forward vector
-			GetCharacterMovement()->SetMovementMode(MOVE_Flying);
-			walkagain = true;
+			// get up vector
+			if (!walkagain) {
+				GetCharacterMovement()->SetMovementMode(MOVE_Flying);
+				walkagain = true;
+			}
 			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Z);
-			if (onWall) Value = 0;
 			AddMovementInput(Direction, Value);
+			FVector Force = FVector(0, 0, 500);
+			GetCharacterMovement()->AddImpulse(Force);
 		}
 		
+	}
+	else {
+		movingW = false;
 	}
 	
 	
@@ -239,6 +253,7 @@ void AShroommateProtoCharacter::MoveRight(float Value)
 {
 	if ( (Controller != NULL) && (Value != 0.0f) )
 	{
+		movingR = true;
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -252,6 +267,9 @@ void AShroommateProtoCharacter::MoveRight(float Value)
 		if (onWall) Value = 0;
 		AddMovementInput(Direction, Value);
 	}
+	else {
+		movingR = false;
+	}
 	if (squishsquish->IsValidLowLevelFast()) {
 		shroomAudio->SetSound(squishsquish);
 	}
@@ -263,6 +281,11 @@ void AShroommateProtoCharacter::MoveRight(float Value)
 void AShroommateProtoCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (!movingW && !movingR && canclimb) {
+		FVector Force = FVector(0, 0, 0);
+		GetCharacterMovement()->Velocity = Force;
+	}
 
 	//AG 10/22/17: Get on wall
 	/*if (canWall && timeSinceWallJump >= wallRate) {
