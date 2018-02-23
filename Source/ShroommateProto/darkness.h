@@ -22,8 +22,11 @@ public:
 	// Sets default values for this actor's properties
 	Adarkness();
 	bool inShade = false;
+	bool justOut = false;
+
 	float timeInShade = 0.f;
 	AActor* objectInShade;
+	AActor* objectOutShade;
 
 protected:
 	// Called when the game starts or when spawned
