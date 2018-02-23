@@ -38,16 +38,21 @@ void Adarkness::Tick(float DeltaTime)
 	if (inShade && objectInShade->GetName() == "Character") {
 		AShroommateProtoCharacter* tempChar = Cast<AShroommateProtoCharacter>(objectInShade);
 		UPostProcessComponent* tempPPC = tempChar->FindComponentByClass<UPostProcessComponent>();
-		tempPPC->Settings.AutoExposureMinBrightness = 10.f;
+		if (change > 0) {
+			tempPPC->Settings.AutoExposureMinBrightness = 10.f;
+
+		}
+		else {
+			tempPPC->Settings.AutoExposureMaxBrightness = 0.01f;
+		}
 
 
 		timeInShade += DeltaTime;
 		if (timeInShade > 0.5f) {
 			FVector NewScale = objectInShade->GetActorScale();
-			objectInShade->SetActorRelativeScale3D(NewScale + FVector(0.001f, 0.001f, 0.001f));
+			//objectInShade->SetActorRelativeScale3D(NewScale + FVector(0.001f, 0.001f, 0.001f));
 			tempChar = Cast<AShroommateProtoCharacter>(objectInShade);
 			UQualities3* tempq = tempChar->FindComponentByClass<UQualities3>();
-			//UPostProcessComponent* tempPPC = tempChar->FindComponentByClass<UPostProcessComponent>()
 			//for testing purposes
 			tempq->addToLight(change);
 			//print("Light: "+FString::SanitizeFloat(tempq->getLight()));
@@ -61,7 +66,9 @@ void Adarkness::Tick(float DeltaTime)
 
 		AShroommateProtoCharacter* tempChar = Cast<AShroommateProtoCharacter>(objectOutShade);
 		UPostProcessComponent* tempPPC = tempChar->FindComponentByClass<UPostProcessComponent>();
-		tempPPC->Settings.AutoExposureMinBrightness =0.03f;
+		tempPPC->Settings.AutoExposureMinBrightness = 0.03f;
+		tempPPC->Settings.AutoExposureMaxBrightness = 2.0f;
+		justOut = false;
 	}
 	
 	
