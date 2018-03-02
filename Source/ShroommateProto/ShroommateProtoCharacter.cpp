@@ -82,6 +82,10 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	CurrentWater = 70;
 	Currency = 0;
 	State = 2;
+	MaxExp = 15;
+	CurrentExp = 0;
+	Level = 1;
+	FoundShroom = false;
 
 
 	//jump setting
@@ -367,6 +371,19 @@ void AShroommateProtoCharacter::setCurrency(int C) {
 void AShroommateProtoCharacter::setState(int S) {
 	State = S;
 }
+void AShroommateProtoCharacter::setMaxExp(float ME) {
+	MaxExp = ME;
+}
+void AShroommateProtoCharacter::setCurrentExp(float CE) {
+	CurrentExp = CE;
+}
+void AShroommateProtoCharacter::setLevel(int L) {
+	Level = L;
+}
+void AShroommateProtoCharacter::setFoundShroom(bool FS) {
+	FoundShroom = FS;
+}
+
 
 float AShroommateProtoCharacter::getMaxHealth() {
 	return MaxHealth;
@@ -385,4 +402,16 @@ int AShroommateProtoCharacter::getCurrency() {
 }
 int AShroommateProtoCharacter::getState() {
 	return State;
+}
+float AShroommateProtoCharacter::getMaxExp() {
+	return MaxExp;
+}
+float AShroommateProtoCharacter::getCurrentExp() {
+	return CurrentExp;
+}
+int AShroommateProtoCharacter::getLevel() {
+	return Level;
+}
+bool AShroommateProtoCharacter::getFoundShroom() {
+	return FoundShroom;
 }
