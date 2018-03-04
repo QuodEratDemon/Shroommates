@@ -81,7 +81,14 @@ public:
 		int Currency;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		int State;
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		float MaxExp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		float CurrentExp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int Level;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool FoundShroom;
 
 
 	//jump
@@ -163,6 +170,12 @@ public:
 	void setCurrentwater(float CW);
 	void setCurrency(int C);
 	void setState(int S);
+	void setMaxExp(float ME);
+	void setCurrentExp(float CE);
+	void setLevel(int L);
+	void setFoundShroom(bool FS);
+
+
 
 	float getMaxHealth();
 	float getCurrentHealth();
@@ -170,5 +183,9 @@ public:
 	float getCurrentWater();
 	int getCurrency();
 	int getState();
+	float getMaxExp();
+	float getCurrentExp();
+	int getLevel();
+	bool getFoundShroom();
 };
 
