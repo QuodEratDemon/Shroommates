@@ -116,6 +116,10 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 	PlayerInputComponent->BindAction("Load", IE_Pressed, this, &AShroommateProtoCharacter::LoadGame);
 	PlayerInputComponent->BindAction("OpenSkillTree", IE_Pressed, this, &AShroommateProtoCharacter::OpenSkillTree);
 	PlayerInputComponent->BindAction("OpenStore", IE_Pressed, this, &AShroommateProtoCharacter::OpenStore);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AShroommateProtoCharacter::Interact);
+	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AShroommateProtoCharacter::unInteract);
+
+
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
@@ -170,6 +174,17 @@ void AShroommateProtoCharacter::OpenStore()
 		a->accessstore();
 	}
 }
+
+void AShroommateProtoCharacter::Interact()
+{
+	interacting = true;
+}
+
+void AShroommateProtoCharacter::unInteract()
+{
+	interacting = false;
+}
+
 
 void AShroommateProtoCharacter::SetClimb(bool b)
 {

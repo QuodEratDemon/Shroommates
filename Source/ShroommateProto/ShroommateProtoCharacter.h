@@ -106,6 +106,8 @@ public:
 		bool movingR;
 
 
+	bool interacting = false;
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -115,6 +117,8 @@ protected:
 
 	//Calls SkilltreeController function when you press E-key
 	void OpenStore();
+
+	
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
@@ -162,6 +166,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void SetClimb(bool b);
+
+	void Interact();
+	void unInteract();
 
 	//UI
 	void setMaxHealth(float MH);
