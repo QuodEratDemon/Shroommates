@@ -35,8 +35,8 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
-	GetCharacterMovement()->JumpZVelocity = 600.f;
-	GetCharacterMovement()->AirControl = 0.2f;
+	//GetCharacterMovement()->JumpZVelocity = 600.f;
+	//GetCharacterMovement()->AirControl = 0.2f;
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -75,10 +75,22 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	jump2 = false;
 	jump3 = false;
 
+	//UI
+	MaxHealth = 3;
+	CurrentHealth = 3;
+	MaxWater = 100;
+	CurrentWater = 70;
+	Currency = 0;
+	State = 2;
+	MaxExp = 15;
+	CurrentExp = 0;
+	Level = 1;
+	FoundShroom = false;
+
 
 	//jump setting
 	jump_height = 3000.f;
-	jump_gravity = 3.5f;
+	jump_gravity = 10.0f;
 	jump_control = 0.2f;
 
 	GetCharacterMovement()->JumpZVelocity = jump_height;
@@ -88,7 +100,8 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 
 	canclimb = false;
 	walkagain = false;
-
+	movingW = false;
+	movingR = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -102,6 +115,7 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 	PlayerInputComponent->BindAction("Save", IE_Pressed, this, &AShroommateProtoCharacter::SaveGame);
 	PlayerInputComponent->BindAction("Load", IE_Pressed, this, &AShroommateProtoCharacter::LoadGame);
 	PlayerInputComponent->BindAction("OpenSkillTree", IE_Pressed, this, &AShroommateProtoCharacter::OpenSkillTree);
+	PlayerInputComponent->BindAction("OpenStore", IE_Pressed, this, &AShroommateProtoCharacter::OpenStore);
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
@@ -145,7 +159,15 @@ void AShroommateProtoCharacter::OpenSkillTree()
 {
 	//if a is not NULL, it calls BeginPlay() in SKillTreeController and it spawns the skill tree UI
 	if (a) {
-		a->BeginPlay();
+		a->accessskill();
+	}
+}
+//Calls SkilltreeController function when you press E-key
+void AShroommateProtoCharacter::OpenStore()
+{
+	//if a is not NULL, it calls accessstore() in SKillTreeController and it spawns the store UI
+	if (a) {
+		a->accessstore();
 	}
 }
 
@@ -163,7 +185,11 @@ void AShroommateProtoCharacter::OnResetVR()
 
 void AShroommateProtoCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
 {
-	
+	/*
+	GetCharacterMovement()->JumpZVelocity = jump_height;
+	GetCharacterMovement()->AirControl = jump_control;
+	GetCharacterMovement()->GravityScale = jump_gravity;
+	*/
 
 	Jump();
 }
@@ -189,6 +215,7 @@ void AShroommateProtoCharacter::MoveForward(float Value)
 {
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
+		movingW = true;
 		// find out which way is forward
 		if (!canclimb) {
 			const FRotator Rotation = Controller->GetControlRotation();
@@ -205,14 +232,20 @@ void AShroommateProtoCharacter::MoveForward(float Value)
 		else if(canclimb){
 			const FRotator Rotation = Controller->GetControlRotation();
 			const FRotator YawRotation(-1, Rotation.Yaw, 0);
-			// get forward vector
-			GetCharacterMovement()->SetMovementMode(MOVE_Flying);
-			walkagain = true;
+			// get up vector
+			if (!walkagain) {
+				GetCharacterMovement()->SetMovementMode(MOVE_Flying);
+				walkagain = true;
+			}
 			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Z);
-			if (onWall) Value = 0;
 			AddMovementInput(Direction, Value);
+			FVector Force = FVector(0, 0, 500);
+			GetCharacterMovement()->AddImpulse(Force);
 		}
 		
+	}
+	else {
+		movingW = false;
 	}
 	
 	
@@ -224,6 +257,7 @@ void AShroommateProtoCharacter::MoveRight(float Value)
 {
 	if ( (Controller != NULL) && (Value != 0.0f) )
 	{
+		movingR = true;
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -237,6 +271,9 @@ void AShroommateProtoCharacter::MoveRight(float Value)
 		if (onWall) Value = 0;
 		AddMovementInput(Direction, Value);
 	}
+	else {
+		movingR = false;
+	}
 	if (squishsquish->IsValidLowLevelFast()) {
 		shroomAudio->SetSound(squishsquish);
 	}
@@ -248,6 +285,11 @@ void AShroommateProtoCharacter::MoveRight(float Value)
 void AShroommateProtoCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (!movingW && !movingR && canclimb) {
+		FVector Force = FVector(0, 0, 0);
+		GetCharacterMovement()->Velocity = Force;
+	}
 
 	//AG 10/22/17: Get on wall
 	/*if (canWall && timeSinceWallJump >= wallRate) {
@@ -309,4 +351,67 @@ void AShroommateProtoCharacter::LoadGame()
 	this->SetActorLocation(SaveGameInstance->PlayerLocation);
 	//debug
 	//GEngine->AddOnScreenDebugMessage(-1, 5f, FColor:Red, TEXT("Game Loaded"));
+}
+
+void AShroommateProtoCharacter::setMaxHealth(float MH) {
+	MaxHealth = MH;
+}
+void AShroommateProtoCharacter::setCurrentHealth(float CH) {
+	CurrentHealth = CH;
+}
+void AShroommateProtoCharacter::setMaxWater(float MW) {
+	MaxWater = MW;
+}
+void AShroommateProtoCharacter::setCurrentwater(float CW) {
+	CurrentWater = CW;
+}
+void AShroommateProtoCharacter::setCurrency(int C) {
+	Currency = C;
+}
+void AShroommateProtoCharacter::setState(int S) {
+	State = S;
+}
+void AShroommateProtoCharacter::setMaxExp(float ME) {
+	MaxExp = ME;
+}
+void AShroommateProtoCharacter::setCurrentExp(float CE) {
+	CurrentExp = CE;
+}
+void AShroommateProtoCharacter::setLevel(int L) {
+	Level = L;
+}
+void AShroommateProtoCharacter::setFoundShroom(bool FS) {
+	FoundShroom = FS;
+}
+
+
+float AShroommateProtoCharacter::getMaxHealth() {
+	return MaxHealth;
+}
+float AShroommateProtoCharacter::getCurrentHealth() {
+	return CurrentHealth;
+}
+float AShroommateProtoCharacter::getMaxWater() {
+	return MaxWater;
+}
+float AShroommateProtoCharacter::getCurrentWater() {
+	return CurrentWater;
+}
+int AShroommateProtoCharacter::getCurrency() {
+	return Currency;
+}
+int AShroommateProtoCharacter::getState() {
+	return State;
+}
+float AShroommateProtoCharacter::getMaxExp() {
+	return MaxExp;
+}
+float AShroommateProtoCharacter::getCurrentExp() {
+	return CurrentExp;
+}
+int AShroommateProtoCharacter::getLevel() {
+	return Level;
+}
+bool AShroommateProtoCharacter::getFoundShroom() {
+	return FoundShroom;
 }

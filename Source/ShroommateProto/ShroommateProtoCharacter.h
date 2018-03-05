@@ -68,6 +68,28 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		class ASkillTreeController* a;
 
+	//UI stuff
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		float MaxHealth;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		float CurrentHealth;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		float MaxWater;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		float CurrentWater;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int Currency;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int State;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		float MaxExp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		float CurrentExp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int Level;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool FoundShroom;
+
 
 	//jump
 	float jump_gravity;
@@ -78,6 +100,10 @@ public:
 		bool canclimb;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool walkagain;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool movingW;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool movingR;
 
 
 protected:
@@ -87,6 +113,8 @@ protected:
 	//Calls SkilltreeController function when you press U-key
 	void OpenSkillTree();
 
+	//Calls SkilltreeController function when you press E-key
+	void OpenStore();
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
@@ -134,5 +162,30 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void SetClimb(bool b);
+
+	//UI
+	void setMaxHealth(float MH);
+	void setCurrentHealth(float CH);
+	void setMaxWater(float MW);
+	void setCurrentwater(float CW);
+	void setCurrency(int C);
+	void setState(int S);
+	void setMaxExp(float ME);
+	void setCurrentExp(float CE);
+	void setLevel(int L);
+	void setFoundShroom(bool FS);
+
+
+
+	float getMaxHealth();
+	float getCurrentHealth();
+	float getMaxWater();
+	float getCurrentWater();
+	int getCurrency();
+	int getState();
+	float getMaxExp();
+	float getCurrentExp();
+	int getLevel();
+	bool getFoundShroom();
 };
 

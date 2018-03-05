@@ -23,6 +23,11 @@ public:
 
 	UUserWidget* MySkillTree;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+		TSubclassOf<class UUserWidget> wStore;
+
+	UUserWidget* MyStore;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool insidebuyupgradezone;
 
@@ -33,4 +38,9 @@ public:
 		void setzone();
 	UFUNCTION()
 		void freezone();
+
+	UFUNCTION()
+		void accessstore();
+	UFUNCTION()
+		void accessskill();
 };
