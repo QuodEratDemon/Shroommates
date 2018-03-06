@@ -108,6 +108,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool interacting;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool tut1visible;
+
 
 protected:
 
