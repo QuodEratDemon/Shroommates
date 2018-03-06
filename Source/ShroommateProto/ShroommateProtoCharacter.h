@@ -105,20 +105,21 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool movingR;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool interacting;
 
-	bool interacting = false;
 
 protected:
 
 	virtual void BeginPlay() override;
 
+	void Interact();
+	void unInteract();
 	//Calls SkilltreeController function when you press U-key
 	void OpenSkillTree();
 
 	//Calls SkilltreeController function when you press E-key
 	void OpenStore();
-
-	
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
@@ -167,9 +168,6 @@ public:
 
 	void SetClimb(bool b);
 
-	void Interact();
-	void unInteract();
-
 	//UI
 	void setMaxHealth(float MH);
 	void setCurrentHealth(float CH);
@@ -182,7 +180,8 @@ public:
 	void setLevel(int L);
 	void setFoundShroom(bool FS);
 
-
+	void setInteract(bool in);
+	bool getInteract();
 
 	float getMaxHealth();
 	float getCurrentHealth();

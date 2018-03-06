@@ -39,11 +39,17 @@ void Adarkness::Tick(float DeltaTime)
 		AShroommateProtoCharacter* tempChar = Cast<AShroommateProtoCharacter>(objectInShade);
 		UPostProcessComponent* tempPPC = tempChar->FindComponentByClass<UPostProcessComponent>();
 		if (change > 0) {
-			tempPPC->Settings.AutoExposureMinBrightness = 10.f;
+			if (tempPPC->Settings.AutoExposureMinBrightness < 10.f) {
+				tempPPC->Settings.AutoExposureMinBrightness += (DeltaTime * 10.f);
+			}
+			//tempPPC->Settings.AutoExposureMinBrightness = 10.f;
 
 		}
 		else {
-			tempPPC->Settings.AutoExposureMaxBrightness = 0.01f;
+			if (tempPPC->Settings.AutoExposureMaxBrightness > 0.1f) {
+				tempPPC->Settings.AutoExposureMaxBrightness -= (DeltaTime * 2.f);
+			}
+			//tempPPC->Settings.AutoExposureMaxBrightness = 0.05f;
 		}
 
 

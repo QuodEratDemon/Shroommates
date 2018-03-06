@@ -49,29 +49,34 @@ void AGrowtest::BeginPlay()
 void AGrowtest::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
 
+	/*
+	Controller = GetWorld()->GetFirstPlayerController();
+	if (Controller != NULL) {
+		if (Controller->IsInputKeyDown(EKeys::E)) {
+			consume = 1;
+		}
+		else {
+			consume = 0;
+		}
+	}*/
 
 	if (inConsumeRange && !eaten) {
 		
 		
 		AShroommateProtoCharacter* tempChar = Cast<AShroommateProtoCharacter>(contact);
-		UQualities3* tempq = tempChar->FindComponentByClass<UQualities3>();
-		print("i");
 		if (tempChar->interacting) {
-			//for testing purposes
+			UQualities3* tempq = tempChar->FindComponentByClass<UQualities3>();
 			FVector NewScale = contact->GetActorScale();
 			contact->SetActorRelativeScale3D(NewScale + FVector(0.005f, 0.005f, 0.005f));
-
+			//for testing purposes
 			tempq->addToHunger(change);
 			this->SetActorHiddenInGame(true);
 			this->SetActorEnableCollision(false);
 			eaten = 1;
-			print("n");
+			
 		}
 	}
-
-	
 
 	if (eaten) {
 		respawn += DeltaTime;
