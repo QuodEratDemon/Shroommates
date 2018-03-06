@@ -110,6 +110,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool tut1visible;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool tut1seen;
 
 
 protected:
