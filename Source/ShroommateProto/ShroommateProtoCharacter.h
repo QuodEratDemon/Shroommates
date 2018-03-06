@@ -105,11 +105,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool movingR;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool interacting;
+
 
 protected:
 
 	virtual void BeginPlay() override;
 
+	void Interact();
+	void unInteract();
 	//Calls SkilltreeController function when you press U-key
 	void OpenSkillTree();
 
@@ -175,7 +180,8 @@ public:
 	void setLevel(int L);
 	void setFoundShroom(bool FS);
 
-
+	void setInteract(bool in);
+	bool getInteract();
 
 	float getMaxHealth();
 	float getCurrentHealth();

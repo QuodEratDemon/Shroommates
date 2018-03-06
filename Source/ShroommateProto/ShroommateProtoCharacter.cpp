@@ -102,6 +102,8 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	walkagain = false;
 	movingW = false;
 	movingR = false;
+
+	interacting = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -116,6 +118,9 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 	PlayerInputComponent->BindAction("Load", IE_Pressed, this, &AShroommateProtoCharacter::LoadGame);
 	PlayerInputComponent->BindAction("OpenSkillTree", IE_Pressed, this, &AShroommateProtoCharacter::OpenSkillTree);
 	PlayerInputComponent->BindAction("OpenStore", IE_Pressed, this, &AShroommateProtoCharacter::OpenStore);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AShroommateProtoCharacter::Interact);
+	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AShroommateProtoCharacter::unInteract);
+
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
@@ -152,6 +157,29 @@ void AShroommateProtoCharacter::BeginPlay()
 	Super::BeginPlay();
 	//casting pointer to SkillTreeController reference
 	a = Cast<ASkillTreeController>(Controller);
+}
+
+//interaction
+void AShroommateProtoCharacter::Interact() {
+	print("pressed");
+	interacting = true;
+
+}
+
+void AShroommateProtoCharacter::unInteract() {
+	print("release");
+	interacting = false;
+
+}
+
+void AShroommateProtoCharacter::setInteract(bool in)
+{
+	interacting = in;
+}
+
+bool AShroommateProtoCharacter::getInteract() {
+	return interacting;
+
 }
 
 //Calls SkilltreeController function when you press U-key

@@ -18,6 +18,8 @@ class SHROOMMATEPROTO_API Adarkness : public AActor
 		class UShapeComponent* Hitbox;
 	UPROPERTY(EditAnywhere)
 		float change;
+
+	float lightingDuration = 5.f;
 public:
 	// Sets default values for this actor's properties
 	Adarkness();
