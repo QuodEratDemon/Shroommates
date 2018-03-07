@@ -104,6 +104,8 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	movingR = false;
 
 	interacting = false;
+	tut1visible = false;
+	tut1seen = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
