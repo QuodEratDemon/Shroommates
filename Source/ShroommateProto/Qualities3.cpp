@@ -3,7 +3,8 @@
 #include "Qualities3.h"
 #include "ShroommateProtoCharacter.h"
 #include <math.h> 
-/*#define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White,text)
+#define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White,text)
+/*
 #define print2(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Purple,text)
 #define print3(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 #define print4(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Red,text)*/
@@ -19,8 +20,8 @@ UQualities3::UQualities3()
 	PrimaryComponentTick.bCanEverTick = true;
 
 
-	light = 0.61f; //Having them all start at 0.5f for now
-	hunger = 0.61f;
+	light = 60.f; //Having them all start at 0.5f for now
+	hunger = 60.f;
 	humidity = 0.61f;
 
 }
@@ -46,43 +47,71 @@ void UQualities3::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	timeTick += DeltaTime;
 	FVector NewScale = player->GetActorScale();
 	float growthAmount = growthRate();;
-	if (timeTick >= 0.017) {
-		if (NewScale.X + growthAmount > .1) player->SetActorRelativeScale3D(NewScale + FVector(growthAmount, growthAmount, growthAmount));
-
+	if (timeTick >= 3.f) {
+		//if (NewScale.X + growthAmount > .1) player->SetActorRelativeScale3D(NewScale + FVector(growthAmount, growthAmount, growthAmount));
+		
 		//Decay qualities
 		addToLight(-decayRate);
 		addToHunger(-decayRate);
-		addToHumidity(-decayRate);
+		//addToHumidity(-decayRate);
 
 		curSize = NewScale.X;
 		if (curSize > largestSize) largestSize = curSize;
 
-		timeTick = 0;
+		timeTick = 0.f;
+	}
+	sizeState = updateSize();
+
+	if (changeSize) {
+		AShroommateProtoCharacter* tempChar = Cast<AShroommateProtoCharacter>(player);
+		USpringArmComponent* tempCam = tempChar->GetCameraBoom();
+
+		switch (sizeState)
+		{
+		case 0: {
+			player->SetActorRelativeScale3D(FVector(0.5f, 0.5f, 0.5f));
+			tempCam->TargetArmLength = 2000;
+			break;
+		}
+		case 1: {
+			player->SetActorRelativeScale3D(FVector(1.f, 1.f, 1.f));
+			tempCam->TargetArmLength = 2500;
+			break;
+		}
+		case 2: {
+			player->SetActorRelativeScale3D(FVector(1.5f, 1.5f, 1.5f));
+			tempCam->TargetArmLength = 3000;
+			break;
+		}
+
+				
+		}
+
+		changeSize = false;
 	}
 
 	//Update size scores
 
 
-	AShroommateProtoCharacter* tempChar = Cast<AShroommateProtoCharacter>(player);
-	USpringArmComponent* tempCam = tempChar->GetCameraBoom();
-	tempCam->TargetArmLength += 1000 * growthAmount;
+	DisplayGrowthProgress = (light + hunger) / 2;
+	
 }
 
 // My functions -------------------------------------------------------
 
 //Adds to them (can use negative numbers for subtracting)
 float UQualities3::addToLight(float change) {
-	light = FMath::Clamp(light += change, 0.f, 1.f);
+	light = FMath::Clamp(light += change, 0.f, 1000.f);
 	return light;
 }
 
 float UQualities3::addToHunger(float change) {
-	hunger = FMath::Clamp(hunger += change, 0.f, 1.f);
+	hunger = FMath::Clamp(hunger += change, 0.f, 1000.f);
 	return hunger;
 }
 
 float UQualities3::addToHumidity(float change) {
-	humidity = FMath::Clamp(humidity += change, 0.f, 1.f);
+	humidity = FMath::Clamp(humidity += change, 0.f, 1000.f);
 	return humidity;
 }
 
@@ -191,6 +220,21 @@ float UQualities3::growthRate() {
 		return log(getCurSize() + 0.5f) * .00006;
 		//return .0001; //if (state == 3)  //y=(.02)^1.1
 	}
+}
+
+int UQualities3::updateSize()
+{
+	int newState = 0;
+	if ((light + hunger) / 2 > 500.f) {
+
+		newState = 2;
+	}else if ((light + hunger) / 2 > 100.f) {
+
+		newState = 1;
+	}
+	
+	if (newState != sizeState) changeSize = true;
+	return newState;
 }
 
 float UQualities3::getCurSize() {

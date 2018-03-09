@@ -23,7 +23,7 @@ class SHROOMMATEPROTO_API UQualities3 : public UActorComponent
 	UPROPERTY(EditAnywhere)
 		float threshold = .1; //AG 10/14/17: Adding threshold for growthRate()
 	UPROPERTY(EditAnywhere)
-		float decayRate = .00001; //AG 10/14/17: Decays qualities over time
+		float decayRate = 1.f; //AG 10/14/17: Decays qualities over time
 
     UPROPERTY(EditAnywhere, Category = "Qualities")
 		float curSize; //AG 10/14/17: player's current size
@@ -31,6 +31,8 @@ class SHROOMMATEPROTO_API UQualities3 : public UActorComponent
 		float largestSize = 0; //AG 10/14/17: player's largest size ever
 
 	float timeTick = 0.f;
+
+	
 
 public:
 	// Sets default values for this component's properties
@@ -50,8 +52,7 @@ protected:
 	//AG 10/16/17: Helper function for growthRate()
 	int qualityHunger(float q);
 
-	//AG 10/16/17: Helper function for printing. Stand-in for having UI
-	void printSelect(FString t, int state);
+
 
 public:
 	// Called every frame
@@ -84,6 +85,14 @@ public:
 	//AG 10/14/17: Adding function that determines if player should grow or shrink and by how much
 	float growthRate();
 
+	int updateSize();
+
+	//0=small 1=medium 2=large
+	int sizeState = 0;
+	bool changeSize = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float DisplayGrowthProgress = 0;
 
 
 };
