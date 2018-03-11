@@ -269,7 +269,7 @@ void AShroommateProtoCharacter::MoveForward(float Value)
 			}
 			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Z);
 			AddMovementInput(Direction, Value);
-			FVector Force = FVector(0, 0, 500);
+			FVector Force = FVector(0, 0, 700);
 			GetCharacterMovement()->AddImpulse(Force);
 		}
 		
