@@ -22,8 +22,8 @@ class SHROOMMATEPROTO_API AGrowtest : public AActor
 	UPROPERTY(EditAnywhere)
 		class UShapeComponent* renderBox;
 
-	UPROPERTY(Category = Qualities, EditAnywhere)
-		float change; //AG 10/15/17: How much it affects the attribute 
+	//UPROPERTY(Category = Qualities, EditAnywhere)
+		float change = 30.f; //AG 10/15/17: How much it affects the attribute 
 
 	UPROPERTY(Category = Type, EditAnywhere)
 		TArray<FString> Type = { TEXT("Hunger"), TEXT("Humidity"), TEXT("Light") };
