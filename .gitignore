@@ -77,3 +77,4 @@ DerivedDataCache/*
 
 # Executable folder in case someone packages project in the default directory
 WindowsNoEditor/*
+WindowsNoEditor.zip
