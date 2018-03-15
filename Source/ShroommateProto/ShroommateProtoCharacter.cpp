@@ -86,7 +86,11 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	CurrentExp = 0;
 	Level = 1;
 	FoundShroom = false;
-
+	HasKey = false;
+	Sec = 0;
+	SecTen = 0;
+	Min = 0;
+	MinTen = 0;
 
 	//jump setting
 	jump_height = 3000.f;
@@ -383,6 +387,7 @@ void AShroommateProtoCharacter::LoadGame()
 	//GEngine->AddOnScreenDebugMessage(-1, 5f, FColor:Red, TEXT("Game Loaded"));
 }
 
+//UI Setter
 void AShroommateProtoCharacter::setMaxHealth(float MH) {
 	MaxHealth = MH;
 }
@@ -413,8 +418,23 @@ void AShroommateProtoCharacter::setLevel(int L) {
 void AShroommateProtoCharacter::setFoundShroom(bool FS) {
 	FoundShroom = FS;
 }
+void AShroommateProtoCharacter::setHasKey(bool key) {
+	HasKey = key;
+}
+void AShroommateProtoCharacter::setSec(int sec) {
+	Sec = sec;
+}
+void AShroommateProtoCharacter::setSecTen(int secT) {
+	SecTen = secT;
+}
+void AShroommateProtoCharacter::setMin(int min) {
+	Min = min;
+}
+void AShroommateProtoCharacter::setMinTen(int minT) {
+	MinTen = minT;
+}
 
-
+//UI Getter
 float AShroommateProtoCharacter::getMaxHealth() {
 	return MaxHealth;
 }
@@ -444,4 +464,19 @@ int AShroommateProtoCharacter::getLevel() {
 }
 bool AShroommateProtoCharacter::getFoundShroom() {
 	return FoundShroom;
+}
+bool AShroommateProtoCharacter::getHasKey() {
+	return HasKey;
+}
+int AShroommateProtoCharacter::getSec() {
+	return Sec;
+}
+int AShroommateProtoCharacter::getSecTen(){
+	return SecTen;
+}
+int AShroommateProtoCharacter::getMin() {
+	return Min;
+}
+int AShroommateProtoCharacter::getMinTen() {
+	return MinTen;
 }
