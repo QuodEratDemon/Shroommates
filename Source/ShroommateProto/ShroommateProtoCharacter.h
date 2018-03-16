@@ -89,6 +89,16 @@ public:
 		int Level;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool FoundShroom;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool HasKey;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int Sec;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int SecTen;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int Min;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int MinTen;
 
 
 	//jump
@@ -173,7 +183,7 @@ public:
 
 	void SetClimb(bool b);
 
-	//UI
+	//UI setter
 	void setMaxHealth(float MH);
 	void setCurrentHealth(float CH);
 	void setMaxWater(float MW);
@@ -184,10 +194,16 @@ public:
 	void setCurrentExp(float CE);
 	void setLevel(int L);
 	void setFoundShroom(bool FS);
+	void setHasKey(bool key);
+	void setSec(int sec);
+	void setSecTen(int secT);
+	void setMin(int min);
+	void setMinTen(int minT);
 
 	void setInteract(bool in);
 	bool getInteract();
 
+	// UI Getter
 	float getMaxHealth();
 	float getCurrentHealth();
 	float getMaxWater();
@@ -198,5 +214,11 @@ public:
 	float getCurrentExp();
 	int getLevel();
 	bool getFoundShroom();
+	bool getHasKey();
+	int getSec();
+	int getSecTen();
+	int getMin();
+	int getMinTen();
+
 };
 
