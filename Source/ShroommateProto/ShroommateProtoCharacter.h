@@ -115,6 +115,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool movingR;
 
+	//Inventory system
+	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool interacting;
 

@@ -169,13 +169,11 @@ void AShroommateProtoCharacter::BeginPlay()
 void AShroommateProtoCharacter::Interact() {
 	print("pressed");
 	interacting = true;
-
 }
 
 void AShroommateProtoCharacter::unInteract() {
 	print("release");
 	interacting = false;
-
 }
 
 void AShroommateProtoCharacter::setInteract(bool in)
