@@ -1,7 +1,9 @@
 // Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
 #include "ShroommateProtoCharacter.h"
+#include "ShroommateProto.h"
 #include "SkillTreeController.h"
+#include "Interactable.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -165,6 +167,35 @@ void AShroommateProtoCharacter::BeginPlay()
 	a = Cast<ASkillTreeController>(Controller);
 }
 
+//Inventory system
+void AShroommateProtoCharacter::CheckForInteractable() {
+	FHitResult HitResult;
+
+	//FVector StartTrace = FollowCamera->GetComponentLocation();
+	//FVector EndTrace = (FollowCamera->GetForwardVector() * 300) + StartTrace;
+
+	FVector StartTrace = GetActorLocation();
+	FVector EndTrace = (GetActorForwardVector() * 500.f) + StartTrace;
+
+
+
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
+
+	ASkillTreeController* Controller = Cast<ASkillTreeController>(GetController());
+	if (!Controller) {
+		return;
+	}
+
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartTrace, EndTrace, ECC_Visibility, QueryParams) && Controller) {
+		if (AInteractable* Interactable = Cast<AInteractable>(HitResult.GetActor())) {
+			Controller->CurrentInteractable = Interactable;
+			return;
+		}
+	}
+	Controller->CurrentInteractable = nullptr;
+}
+
 //interaction
 void AShroommateProtoCharacter::Interact() {
 	print("pressed");
@@ -317,6 +348,8 @@ void AShroommateProtoCharacter::MoveRight(float Value)
 void AShroommateProtoCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	CheckForInteractable();
 
 	if (!movingW && !movingR && canclimb) {
 		FVector Force = FVector(0, 0, 0);

@@ -14,7 +14,20 @@ class SHROOMMATEPROTO_API APickup : public AInteractable
 {
 	GENERATED_BODY()
 	
-	
+public:
+
+	APickup();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Pickup")
+		void OnUsed();
+
+protected:
+
+	UPROPERTY(EditAnywhere)
+		UStaticMeshComponent* PickupMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FName ItemID;
 	
 	
 };
