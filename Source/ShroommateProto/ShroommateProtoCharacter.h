@@ -4,7 +4,77 @@
 
 #include "Engine.h"
 #include "GameFramework/Character.h"
+#include "Engine/DataTable.h"
 #include "ShroommateProtoCharacter.generated.h"
+
+USTRUCT(BlueprintType)
+struct FCraftingInfo : public FTableRowBase {
+
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ComponentID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ProductID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bDestroyItemA;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bDestroyItemB;
+};
+
+
+USTRUCT(BlueprintType)
+struct FInventoryItem : public FTableRowBase {
+
+	GENERATED_BODY()
+
+public:
+
+	FInventoryItem() {
+		Name = FText::FromString("Item");
+		Action = FText::FromString("Use");
+		Description = FText::FromString("Enter description for this item");
+		Value = 10;
+	}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ItemID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class APickUp> ItemPickUp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Value;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTexture2D* Thumbnail;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText Description;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FCraftingInfo> CraftCombinations;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bCanBeUsed;
+
+	bool operator == (const FInventoryItem& Item) const {
+		if (ItemID == Item.ItemID)
+			return true;
+		else return false;
+	}
+
+};
 
 UCLASS(config=Game)
 class AShroommateProtoCharacter : public ACharacter
@@ -20,6 +90,7 @@ class AShroommateProtoCharacter : public ACharacter
 	class UCameraComponent* FollowCamera;
 public:
 	AShroommateProtoCharacter();
+
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
@@ -130,6 +201,8 @@ public:
 protected:
 
 	virtual void BeginPlay() override;
+
+	void CheckForInteractable();
 
 	void Interact();
 	void unInteract();

@@ -13,6 +13,14 @@ class AShroommateProtoGameMode : public AGameModeBase
 
 public:
 	AShroommateProtoGameMode();
+
+	class UDataTable* GetItemDB() const {
+		return ItemDB;
+	}
+
+protected:
+	UPROPERTY(EditDefaultsOnly)
+		class UDataTable* ItemDB;
 };
 
 
