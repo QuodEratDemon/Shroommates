@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "ShroommateProtoCharacter.h"
 #include "SkillTreeController.generated.h"
 
 /**
@@ -16,6 +17,24 @@ class SHROOMMATEPROTO_API ASkillTreeController : public APlayerController
 	
 public:
 	ASkillTreeController();
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	class AInteractable* CurrentInteractable;
+
+	UFUNCTION()
+	void Interact();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void ReloadInventory();
+
+	UFUNCTION(BlueprintCallable, Category = "Utils")
+	void AddItemToInventoryByID(FName ID);
+
+	UFUNCTION(BlueprintCallable, Category = "Utils")
+	void CraftItem(FInventoryItem ItemA, FInventoryItem ItemB, ASkillTreeController* Controller);
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	TArray<FInventoryItem> Inventory;
 
 	//Make wSkillTree subclass of UserWidget
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
@@ -43,4 +62,8 @@ public:
 		void accessstore();
 	UFUNCTION()
 		void accessskill();
+
+protected:
+
+	virtual void SetupInputComponent() override;
 };
