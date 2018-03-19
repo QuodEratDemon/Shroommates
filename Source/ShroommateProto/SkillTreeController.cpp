@@ -9,6 +9,7 @@
 ASkillTreeController::ASkillTreeController()
 {
 	insidebuyupgradezone = false;
+	haskey = false;
 }
 
 void ASkillTreeController::BeginPlay()

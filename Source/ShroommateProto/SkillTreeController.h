@@ -50,6 +50,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool insidebuyupgradezone;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool haskey;
+
 	//override BeginPlay() function in UserWidget
 	virtual void BeginPlay() override;
 	
