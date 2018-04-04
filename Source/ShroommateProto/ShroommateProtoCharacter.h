@@ -197,6 +197,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool tut1seen;
 
+	//Gliding
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool glidecheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool glide;
+
 
 protected:
 

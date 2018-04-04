@@ -112,6 +112,9 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	interacting = false;
 	tut1visible = false;
 	tut1seen = false;
+
+	glidecheck = true;
+	glide = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -350,6 +353,38 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	CheckForInteractable();
+
+	if (GetCharacterMovement()->MovementMode == MOVE_Falling) {
+		ASkillTreeController* Controller = Cast<ASkillTreeController>(GetController());
+		if (Controller != NULL) {
+			if (Controller->IsInputKeyDown(EKeys::SpaceBar)) {
+				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), GetVelocity().Z));
+				if (GetVelocity().Z < -2000.0f && glidecheck) {
+					GetCharacterMovement()->GravityScale = 0.5f;
+					glide = true;
+					glidecheck = false;
+				}
+				if (GetVelocity().Z < -500.0f && glide) {
+					FVector Force = FVector(0, 0, 7000);
+					GetCharacterMovement()->AddImpulse(Force);
+				}
+			}
+			else {
+				GetCharacterMovement()->GravityScale = 6.0f;
+				glide = false;
+				glidecheck = true;
+				if (GetVelocity().Z < 0.0f) {
+					FVector Force = FVector(0, 0, -3000);
+					GetCharacterMovement()->AddImpulse(Force);
+				}
+			}
+		}
+	}
+	else {
+		if (GetCharacterMovement()->GravityScale == 0.5f) {
+			GetCharacterMovement()->GravityScale = 6.0f;
+		}
+	}
 
 	if (!movingW && !movingR && canclimb) {
 		FVector Force = FVector(0, 0, 0);
