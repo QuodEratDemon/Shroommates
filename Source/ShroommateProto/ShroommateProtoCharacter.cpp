@@ -23,7 +23,8 @@
 AShroommateProtoCharacter::AShroommateProtoCharacter()
 {
 	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(181.822586f, 369.25589f);
+	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
@@ -131,6 +132,8 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 	PlayerInputComponent->BindAction("OpenStore", IE_Pressed, this, &AShroommateProtoCharacter::OpenStore);
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AShroommateProtoCharacter::Interact);
 	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AShroommateProtoCharacter::unInteract);
+	PlayerInputComponent->BindAction("Flatten", IE_Pressed, this, &AShroommateProtoCharacter::Flatten);
+	PlayerInputComponent->BindAction("Flatten", IE_Released, this, &AShroommateProtoCharacter::unFlatten);
 
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
@@ -198,6 +201,7 @@ void AShroommateProtoCharacter::CheckForInteractable() {
 	}
 	Controller->CurrentInteractable = nullptr;
 }
+
 
 //interaction
 void AShroommateProtoCharacter::Interact() {
@@ -347,6 +351,13 @@ void AShroommateProtoCharacter::MoveRight(float Value)
 	shroomAudio->Play();
 }
 
+void AShroommateProtoCharacter::Flatten(){
+	Crouch();
+}
+void AShroommateProtoCharacter::unFlatten() {
+	UnCrouch();
+}
+
 // Called every frame
 void AShroommateProtoCharacter::Tick(float DeltaTime)
 {
@@ -354,6 +365,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 
 	CheckForInteractable();
 
+	//Gliding
 	if (GetCharacterMovement()->MovementMode == MOVE_Falling) {
 		ASkillTreeController* Controller = Cast<ASkillTreeController>(GetController());
 		if (Controller != NULL) {
@@ -389,43 +401,6 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 	if (!movingW && !movingR && canclimb) {
 		FVector Force = FVector(0, 0, 0);
 		GetCharacterMovement()->Velocity = Force;
-	}
-
-	//AG 10/22/17: Get on wall
-	/*if (canWall && timeSinceWallJump >= wallRate) {
-		APlayerController* Controller = GetWorld()->GetFirstPlayerController();
-		if (Controller != NULL) {
-			if (Controller->IsInputKeyDown(EKeys::SpaceBar)) {
-				GetCharacterMovement()->SetMovementMode(MOVE_Flying);
-				GetCharacterMovement()->StopMovementImmediately();
-				onWall = true;
-				justJumped = false;
-			}
-		}
-	}*/
-	
-	//AG 10/22/17: Jump off wall
-	if (canWall && timeSinceWallJump >= wallRate){//(canWall && !justJumped) || (canWall && timeSinceWallJump >= wallRate)) {
-		APlayerController* Controller = GetWorld()->GetFirstPlayerController();
-		if (Controller != NULL) {
-			if (Controller->IsInputKeyDown(EKeys::SpaceBar)) {
-				GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-				Jump();
-				onWall = false;
-				justJumped = true;
-				timeSinceWallJump = 0;
-				canWall = false;
-				//print("can Jump");
-			}
-		}
-	}
-
-	//AG 10/22/17: Reset timer for when jumped off wall
-	if (justJumped && timeSinceWallJump < wallRate) {
-		timeSinceWallJump += DeltaTime;
-	}
-	else {
-		justJumped = false;
 	}
 }
 

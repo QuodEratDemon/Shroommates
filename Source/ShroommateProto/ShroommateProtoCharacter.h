@@ -210,6 +210,10 @@ protected:
 
 	void CheckForInteractable();
 
+	//Flatten
+	void Flatten();
+	void unFlatten();
+
 	void Interact();
 	void unInteract();
 	//Calls SkilltreeController function when you press U-key
