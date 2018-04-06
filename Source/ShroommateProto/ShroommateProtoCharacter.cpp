@@ -96,7 +96,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	MinTen = 0;
 
 	//jump setting
-	jump_height = 3000.f;
+	jump_height = 2000.f;
 	jump_gravity = 10.0f;
 	jump_control = 0.2f;
 
@@ -136,8 +136,8 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 	PlayerInputComponent->BindAction("Flatten", IE_Released, this, &AShroommateProtoCharacter::unFlatten);
 
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AShroommateProtoCharacter::ShroomCharge);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AShroommateProtoCharacter::ShroomJump);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AShroommateProtoCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AShroommateProtoCharacter::MoveRight);
@@ -281,9 +281,22 @@ void AShroommateProtoCharacter::LookUpAtRate(float Rate)
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
+void AShroommateProtoCharacter::ShroomCharge()
+{
+	GetCharacterMovement()->JumpZVelocity = jump_height;
+	charge = true;
+}
+
+void AShroommateProtoCharacter::ShroomJump()
+{
+	charge = false;
+	Jump();
+	//GetCharacterMovement()->JumpZVelocity = jump_height;
+}
+
 void AShroommateProtoCharacter::MoveForward(float Value)
 {
-	if ((Controller != NULL) && (Value != 0.0f))
+	if ((Controller != NULL) && (Value != 0.0f) && (!charge || glide))
 	{
 		movingW = true;
 		// find out which way is forward
@@ -323,9 +336,9 @@ void AShroommateProtoCharacter::MoveForward(float Value)
 	shroomAudio->Play(0.f);
 }
 
-void AShroommateProtoCharacter::MoveRight(float Value)
+void AShroommateProtoCharacter::MoveRight(float Value )
 {
-	if ( (Controller != NULL) && (Value != 0.0f) )
+	if ( (Controller != NULL) && (Value != 0.0f) && (!charge || glide))
 	{
 		movingR = true;
 		// find out which way is right
@@ -353,9 +366,17 @@ void AShroommateProtoCharacter::MoveRight(float Value)
 
 void AShroommateProtoCharacter::Flatten(){
 	Crouch();
+	GetMesh()->SetRelativeScale3D( FVector(1.f, 1.f, 0.5f));
+	
+	//SetActorRelativeScale3D(oScale * FVector(1.f,1.f,0.5f));
 }
 void AShroommateProtoCharacter::unFlatten() {
 	UnCrouch();
+	GetMesh()->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
+	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
+
+
+	//SetActorRelativeScale3D(oScale * FVector(1.f, 1.f, 2.f));
 }
 
 // Called every frame
@@ -401,6 +422,24 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 	if (!movingW && !movingR && canclimb) {
 		FVector Force = FVector(0, 0, 0);
 		GetCharacterMovement()->Velocity = Force;
+	}
+
+	if (charge && !glide) {
+		if (chargeInterval >= 1.5f) {
+			if (GetCharacterMovement()->JumpZVelocity < 5000.f) {
+				GetCharacterMovement()->JumpZVelocity += chargeLevel;
+
+			}
+			chargeInterval = 0.f;
+		}
+		else {
+			chargeInterval += DeltaTime;
+		}
+		
+	}
+
+	if (bIsCrouched) {
+		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 	}
 }
 

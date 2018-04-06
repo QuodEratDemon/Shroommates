@@ -177,6 +177,10 @@ public:
 	float jump_height;
 	float jump_control;
 
+	bool charge = false;
+	float chargeLevel = 1000.f;
+	float chargeInterval = 0.f;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool canclimb;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
@@ -242,6 +246,9 @@ protected:
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	 */
 	void LookUpAtRate(float Rate);
+
+	void ShroomCharge();
+	void ShroomJump();
 
 	/** Handler for when a touch input begins. */
 	void TouchStarted(ETouchIndex::Type FingerIndex, FVector Location);
