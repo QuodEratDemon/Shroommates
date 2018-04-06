@@ -1,7 +1,9 @@
 // Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
 #include "ShroommateProtoCharacter.h"
+#include "ShroommateProto.h"
 #include "SkillTreeController.h"
+#include "Interactable.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -21,7 +23,8 @@
 AShroommateProtoCharacter::AShroommateProtoCharacter()
 {
 	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(181.822586f, 369.25589f);
+	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
@@ -110,6 +113,9 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	interacting = false;
 	tut1visible = false;
 	tut1seen = false;
+
+	glidecheck = true;
+	glide = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -126,6 +132,8 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 	PlayerInputComponent->BindAction("OpenStore", IE_Pressed, this, &AShroommateProtoCharacter::OpenStore);
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AShroommateProtoCharacter::Interact);
 	PlayerInputComponent->BindAction("Interact", IE_Released, this, &AShroommateProtoCharacter::unInteract);
+	PlayerInputComponent->BindAction("Flatten", IE_Pressed, this, &AShroommateProtoCharacter::Flatten);
+	PlayerInputComponent->BindAction("Flatten", IE_Released, this, &AShroommateProtoCharacter::unFlatten);
 
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
@@ -165,17 +173,45 @@ void AShroommateProtoCharacter::BeginPlay()
 	a = Cast<ASkillTreeController>(Controller);
 }
 
+//Inventory system
+void AShroommateProtoCharacter::CheckForInteractable() {
+	FHitResult HitResult;
+
+	//FVector StartTrace = FollowCamera->GetComponentLocation();
+	//FVector EndTrace = (FollowCamera->GetForwardVector() * 300) + StartTrace;
+
+	FVector StartTrace = GetActorLocation();
+	FVector EndTrace = (GetActorForwardVector() * 500.f) + StartTrace;
+
+
+
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
+
+	ASkillTreeController* Controller = Cast<ASkillTreeController>(GetController());
+	if (!Controller) {
+		return;
+	}
+
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartTrace, EndTrace, ECC_Visibility, QueryParams) && Controller) {
+		if (AInteractable* Interactable = Cast<AInteractable>(HitResult.GetActor())) {
+			Controller->CurrentInteractable = Interactable;
+			return;
+		}
+	}
+	Controller->CurrentInteractable = nullptr;
+}
+
+
 //interaction
 void AShroommateProtoCharacter::Interact() {
 	print("pressed");
 	interacting = true;
-
 }
 
 void AShroommateProtoCharacter::unInteract() {
 	print("release");
 	interacting = false;
-
 }
 
 void AShroommateProtoCharacter::setInteract(bool in)
@@ -315,51 +351,56 @@ void AShroommateProtoCharacter::MoveRight(float Value)
 	shroomAudio->Play();
 }
 
+void AShroommateProtoCharacter::Flatten(){
+	Crouch();
+}
+void AShroommateProtoCharacter::unFlatten() {
+	UnCrouch();
+}
+
 // Called every frame
 void AShroommateProtoCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	CheckForInteractable();
+
+	//Gliding
+	if (GetCharacterMovement()->MovementMode == MOVE_Falling) {
+		ASkillTreeController* Controller = Cast<ASkillTreeController>(GetController());
+		if (Controller != NULL) {
+			if (Controller->IsInputKeyDown(EKeys::SpaceBar)) {
+				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), GetVelocity().Z));
+				if (GetVelocity().Z < -2000.0f && glidecheck) {
+					GetCharacterMovement()->GravityScale = 0.5f;
+					glide = true;
+					glidecheck = false;
+				}
+				if (GetVelocity().Z < -500.0f && glide) {
+					FVector Force = FVector(0, 0, 7000);
+					GetCharacterMovement()->AddImpulse(Force);
+				}
+			}
+			else {
+				GetCharacterMovement()->GravityScale = 6.0f;
+				glide = false;
+				glidecheck = true;
+				if (GetVelocity().Z < 0.0f) {
+					FVector Force = FVector(0, 0, -3000);
+					GetCharacterMovement()->AddImpulse(Force);
+				}
+			}
+		}
+	}
+	else {
+		if (GetCharacterMovement()->GravityScale == 0.5f) {
+			GetCharacterMovement()->GravityScale = 6.0f;
+		}
+	}
+
 	if (!movingW && !movingR && canclimb) {
 		FVector Force = FVector(0, 0, 0);
 		GetCharacterMovement()->Velocity = Force;
-	}
-
-	//AG 10/22/17: Get on wall
-	/*if (canWall && timeSinceWallJump >= wallRate) {
-		APlayerController* Controller = GetWorld()->GetFirstPlayerController();
-		if (Controller != NULL) {
-			if (Controller->IsInputKeyDown(EKeys::SpaceBar)) {
-				GetCharacterMovement()->SetMovementMode(MOVE_Flying);
-				GetCharacterMovement()->StopMovementImmediately();
-				onWall = true;
-				justJumped = false;
-			}
-		}
-	}*/
-	
-	//AG 10/22/17: Jump off wall
-	if (canWall && timeSinceWallJump >= wallRate){//(canWall && !justJumped) || (canWall && timeSinceWallJump >= wallRate)) {
-		APlayerController* Controller = GetWorld()->GetFirstPlayerController();
-		if (Controller != NULL) {
-			if (Controller->IsInputKeyDown(EKeys::SpaceBar)) {
-				GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-				Jump();
-				onWall = false;
-				justJumped = true;
-				timeSinceWallJump = 0;
-				canWall = false;
-				//print("can Jump");
-			}
-		}
-	}
-
-	//AG 10/22/17: Reset timer for when jumped off wall
-	if (justJumped && timeSinceWallJump < wallRate) {
-		timeSinceWallJump += DeltaTime;
-	}
-	else {
-		justJumped = false;
 	}
 }
 
