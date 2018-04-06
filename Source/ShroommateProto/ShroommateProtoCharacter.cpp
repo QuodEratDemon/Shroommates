@@ -205,12 +205,11 @@ void AShroommateProtoCharacter::CheckForInteractable() {
 
 //interaction
 void AShroommateProtoCharacter::Interact() {
-	print("pressed");
+	a->Interact();
 	interacting = true;
 }
 
 void AShroommateProtoCharacter::unInteract() {
-	print("release");
 	interacting = false;
 }
 
