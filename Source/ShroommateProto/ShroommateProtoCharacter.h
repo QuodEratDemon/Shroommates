@@ -4,7 +4,77 @@
 
 #include "Engine.h"
 #include "GameFramework/Character.h"
+#include "Engine/DataTable.h"
 #include "ShroommateProtoCharacter.generated.h"
+
+USTRUCT(BlueprintType)
+struct FCraftingInfo : public FTableRowBase {
+
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ComponentID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ProductID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bDestroyItemA;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bDestroyItemB;
+};
+
+
+USTRUCT(BlueprintType)
+struct FInventoryItem : public FTableRowBase {
+
+	GENERATED_BODY()
+
+public:
+
+	FInventoryItem() {
+		Name = FText::FromString("Item");
+		Action = FText::FromString("Use");
+		Description = FText::FromString("Enter description for this item");
+		Value = 10;
+	}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ItemID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class APickUp> ItemPickUp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Value;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTexture2D* Thumbnail;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText Description;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FCraftingInfo> CraftCombinations;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bCanBeUsed;
+
+	bool operator == (const FInventoryItem& Item) const {
+		if (ItemID == Item.ItemID)
+			return true;
+		else return false;
+	}
+
+};
 
 UCLASS(config=Game)
 class AShroommateProtoCharacter : public ACharacter
@@ -20,6 +90,7 @@ class AShroommateProtoCharacter : public ACharacter
 	class UCameraComponent* FollowCamera;
 public:
 	AShroommateProtoCharacter();
+
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
@@ -89,12 +160,26 @@ public:
 		int Level;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool FoundShroom;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool HasKey;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int Sec;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int SecTen;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int Min;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int MinTen;
 
 
 	//jump
 	float jump_gravity;
 	float jump_height;
 	float jump_control;
+
+	bool charge = false;
+	float chargeLevel = 1000.f;
+	float chargeInterval = 0.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool canclimb;
@@ -105,6 +190,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool movingR;
 
+	//Inventory system
+	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool interacting;
 
@@ -113,13 +201,26 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool tut1seen;
 
+	//Gliding
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool glidecheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool glide;
+
+	void Interact();
+	void unInteract();
+
 
 protected:
 
 	virtual void BeginPlay() override;
 
-	void Interact();
-	void unInteract();
+	void CheckForInteractable();
+
+	//Flatten
+	void Flatten();
+	void unFlatten();
+
 	//Calls SkilltreeController function when you press U-key
 	void OpenSkillTree();
 
@@ -147,6 +248,9 @@ protected:
 	 */
 	void LookUpAtRate(float Rate);
 
+	void ShroomCharge();
+	void ShroomJump();
+
 	/** Handler for when a touch input begins. */
 	void TouchStarted(ETouchIndex::Type FingerIndex, FVector Location);
 
@@ -173,7 +277,7 @@ public:
 
 	void SetClimb(bool b);
 
-	//UI
+	//UI setter
 	void setMaxHealth(float MH);
 	void setCurrentHealth(float CH);
 	void setMaxWater(float MW);
@@ -184,10 +288,16 @@ public:
 	void setCurrentExp(float CE);
 	void setLevel(int L);
 	void setFoundShroom(bool FS);
+	void setHasKey(bool key);
+	void setSec(int sec);
+	void setSecTen(int secT);
+	void setMin(int min);
+	void setMinTen(int minT);
 
 	void setInteract(bool in);
 	bool getInteract();
 
+	// UI Getter
 	float getMaxHealth();
 	float getCurrentHealth();
 	float getMaxWater();
@@ -198,5 +308,11 @@ public:
 	float getCurrentExp();
 	int getLevel();
 	bool getFoundShroom();
+	bool getHasKey();
+	int getSec();
+	int getSecTen();
+	int getMin();
+	int getMinTen();
+
 };
 
