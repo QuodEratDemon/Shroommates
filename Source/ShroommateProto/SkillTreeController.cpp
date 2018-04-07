@@ -61,7 +61,7 @@ void ASkillTreeController::accessskill() {
 void ASkillTreeController::SetupInputComponent() {
 	Super::SetupInputComponent();
 
-	InputComponent->BindAction("Interact", IE_Pressed, this, &ASkillTreeController::Interact);
+	//InputComponent->BindAction("Interact", IE_Pressed, this, &ASkillTreeController::Interact);
 }
 
 void ASkillTreeController::CraftItem(FInventoryItem ItemA, FInventoryItem ItemB, ASkillTreeController* Controller) {
