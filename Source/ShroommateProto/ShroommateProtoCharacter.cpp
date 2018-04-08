@@ -283,12 +283,16 @@ void AShroommateProtoCharacter::LookUpAtRate(float Rate)
 void AShroommateProtoCharacter::ShroomCharge()
 {
 	GetCharacterMovement()->JumpZVelocity = jump_height;
-	charge = true;
+	
+	ischarging = true;
+	
 }
 
 void AShroommateProtoCharacter::ShroomJump()
 {
 	charge = false;
+	ischarging = false;
+	chargeInterval = 0.f;
 	Jump();
 	//GetCharacterMovement()->JumpZVelocity = jump_height;
 }
@@ -389,7 +393,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 	if (GetCharacterMovement()->MovementMode == MOVE_Falling) {
 		ASkillTreeController* Controller = Cast<ASkillTreeController>(GetController());
 		if (Controller != NULL) {
-			if (Controller->IsInputKeyDown(EKeys::SpaceBar)) {
+			if (ischarging) {
 				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), GetVelocity().Z));
 				if (GetVelocity().Z < -2000.0f && glidecheck) {
 					GetCharacterMovement()->GravityScale = 0.5f;
@@ -423,8 +427,8 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 		GetCharacterMovement()->Velocity = Force;
 	}
 
-	if (charge && !glide) {
-		if (chargeInterval >= 1.5f) {
+	if (ischarging && !glide) {
+		if (chargeInterval >= 1.f) {
 			if (GetCharacterMovement()->JumpZVelocity < 5000.f) {
 				GetCharacterMovement()->JumpZVelocity += chargeLevel;
 
@@ -436,6 +440,11 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 		}
 		
 	}
+
+	if (chargeInterval >= 0.1f) {
+		charge = true;
+	}
+	
 
 	if (bIsCrouched) {
 		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
