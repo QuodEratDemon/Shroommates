@@ -178,6 +178,7 @@ public:
 	float jump_control;
 
 	bool charge = false;
+	bool ischarging = false;
 	float chargeLevel = 1000.f;
 	float chargeInterval = 0.f;
 
