@@ -299,7 +299,9 @@ void AShroommateProtoCharacter::ShroomJump()
 
 void AShroommateProtoCharacter::MoveForward(float Value)
 {
-	if ((Controller != NULL) && (Value != 0.0f) && (!charge || glide))
+
+
+	if ((Controller != NULL) && (Value != 0.0f) )
 	{
 		movingW = true;
 		// find out which way is forward
@@ -341,7 +343,10 @@ void AShroommateProtoCharacter::MoveForward(float Value)
 
 void AShroommateProtoCharacter::MoveRight(float Value )
 {
-	if ( (Controller != NULL) && (Value != 0.0f) && (!charge || glide))
+
+
+
+	if ( (Controller != NULL) && (Value != 0.0f) )
 	{
 		movingR = true;
 		// find out which way is right
@@ -369,7 +374,6 @@ void AShroommateProtoCharacter::MoveRight(float Value )
 
 void AShroommateProtoCharacter::Flatten(){
 	Crouch();
-	GetMesh()->SetRelativeScale3D( FVector(1.f, 1.f, 0.5f));
 	
 	//SetActorRelativeScale3D(oScale * FVector(1.f,1.f,0.5f));
 }
@@ -414,12 +418,14 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 					GetCharacterMovement()->AddImpulse(Force);
 				}
 			}
+
 		}
 	}
 	else {
 		if (GetCharacterMovement()->GravityScale == 0.5f) {
 			GetCharacterMovement()->GravityScale = 6.0f;
 		}
+		glide = false;
 	}
 
 	if (!movingW && !movingR && canclimb) {
@@ -441,13 +447,24 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 		
 	}
 
-	if (chargeInterval >= 0.1f) {
+	if (chargeInterval >= 0.2f) {
 		charge = true;
 	}
 	
+	if (!charge || glide) {
+		GetCharacterMovement()->MaxWalkSpeed = 1500.f;
+	}
+	else {
+		GetCharacterMovement()->MaxWalkSpeed = 250.f;
+	}
 
 	if (bIsCrouched) {
 		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
+		GetMesh()->SetRelativeScale3D(FVector(1.f, 1.f, 0.5f));
+
+	}
+	else {
+		GetMesh()->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
 	}
 }
 
