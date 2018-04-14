@@ -90,6 +90,11 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	Level = 1;
 	FoundShroom = false;
 	HasKey = false;
+	HasBoombox = false;
+	HasCD1 = false;
+	HasCD2 = false;
+	HasCD3 = false;
+	HasBattery = false;
 	Sec = 0;
 	SecTen = 0;
 	Min = 0;
@@ -526,6 +531,21 @@ void AShroommateProtoCharacter::setFoundShroom(bool FS) {
 void AShroommateProtoCharacter::setHasKey(bool key) {
 	HasKey = key;
 }
+void AShroommateProtoCharacter::setHasBoombox(bool boombox) {
+	HasBoombox = boombox;
+}
+void AShroommateProtoCharacter::setHasCD1(bool cd1) {
+	HasCD1 = cd1;
+}
+void AShroommateProtoCharacter::setHasCD2(bool cd2) {
+	HasCD2 = cd2;
+}
+void AShroommateProtoCharacter::setHasCD3(bool cd3) {
+	HasCD3 = cd3;
+}
+void AShroommateProtoCharacter::setHasBattery(bool battery) {
+	HasBattery = battery;
+}
 void AShroommateProtoCharacter::setSec(int sec) {
 	Sec = sec;
 }
@@ -572,6 +592,21 @@ bool AShroommateProtoCharacter::getFoundShroom() {
 }
 bool AShroommateProtoCharacter::getHasKey() {
 	return HasKey;
+}
+bool AShroommateProtoCharacter::getHasBoombox() {
+	return HasBoombox;
+}
+bool AShroommateProtoCharacter::getHasCD1() {
+	return HasCD1;
+}
+bool AShroommateProtoCharacter::getHasCD2() {
+	return HasCD2;
+}
+bool AShroommateProtoCharacter::getHasCD3() {
+	return HasCD3;
+}
+bool AShroommateProtoCharacter::getHasBattery() {
+	return HasBattery;
 }
 int AShroommateProtoCharacter::getSec() {
 	return Sec;

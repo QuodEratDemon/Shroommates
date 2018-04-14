@@ -10,6 +10,11 @@ ASkillTreeController::ASkillTreeController()
 {
 	insidebuyupgradezone = false;
 	haskey = false;
+	hasboombox = false;
+	hascd1 = false;
+	hascd2 = false;
+	hascd3 = false;
+	hasbattery = false;
 }
 
 void ASkillTreeController::BeginPlay()
