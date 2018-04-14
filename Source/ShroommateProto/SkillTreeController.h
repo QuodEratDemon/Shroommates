@@ -52,6 +52,16 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool haskey;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool hasboombox;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool hascd1;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool hascd2;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool hascd3;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool hasbattery;
 
 	//override BeginPlay() function in UserWidget
 	virtual void BeginPlay() override;
