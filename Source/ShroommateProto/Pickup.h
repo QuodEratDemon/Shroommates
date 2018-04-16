@@ -23,7 +23,7 @@ public:
 
 protected:
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* PickupMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
