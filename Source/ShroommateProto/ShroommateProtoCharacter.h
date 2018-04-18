@@ -180,6 +180,13 @@ public:
 		int Min;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		int MinTen;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool TPause;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool JumpCharge;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		float JumpChrageTimer;
+
 
 
 	//jump
@@ -309,6 +316,8 @@ public:
 	void setSecTen(int secT);
 	void setMin(int min);
 	void setMinTen(int minT);
+	void setTPause(bool TP);
+	void setJumpChrageTimer(float JCT);
 
 	void setInteract(bool in);
 	bool getInteract();
@@ -334,6 +343,9 @@ public:
 	int getSecTen();
 	int getMin();
 	int getMinTen();
+	bool getTPause();
+	bool getJumpCharge();
+	float getJumpChrageTimer();
 
 };
 

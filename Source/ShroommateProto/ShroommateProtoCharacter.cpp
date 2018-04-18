@@ -99,6 +99,9 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	SecTen = 0;
 	Min = 0;
 	MinTen = 0;
+	TPause = false;
+	JumpCharge = ischarging;
+	JumpChrageTimer = 0;
 
 	//jump setting
 	jump_height = 2000.f;
@@ -558,6 +561,14 @@ void AShroommateProtoCharacter::setMin(int min) {
 void AShroommateProtoCharacter::setMinTen(int minT) {
 	MinTen = minT;
 }
+void AShroommateProtoCharacter::setTPause(bool TP) {
+	TPause = TP;
+}
+void AShroommateProtoCharacter::setJumpChrageTimer(float JCT) {
+	JumpChrageTimer = JCT;
+}
+
+
 
 //UI Getter
 float AShroommateProtoCharacter::getMaxHealth() {
@@ -619,4 +630,14 @@ int AShroommateProtoCharacter::getMin() {
 }
 int AShroommateProtoCharacter::getMinTen() {
 	return MinTen;
+}
+bool AShroommateProtoCharacter::getTPause() {
+	return TPause;
+}
+bool AShroommateProtoCharacter::getJumpCharge() {
+	JumpCharge = ischarging;
+	return JumpCharge;
+}
+float AShroommateProtoCharacter::getJumpChrageTimer() {
+	return JumpChrageTimer;
 }
