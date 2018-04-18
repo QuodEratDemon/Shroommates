@@ -317,6 +317,7 @@ public:
 	void setMin(int min);
 	void setMinTen(int minT);
 	void setTPause(bool TP);
+	void setJumpCharge(bool JC);
 	void setJumpChrageTimer(float JCT);
 
 	void setInteract(bool in);

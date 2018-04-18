@@ -299,6 +299,7 @@ void AShroommateProtoCharacter::ShroomCharge()
 void AShroommateProtoCharacter::ShroomJump()
 {
 	charge = false;
+	JumpCharge = false;
 	ischarging = false;
 	chargeInterval = 0.f;
 	Jump();
@@ -457,6 +458,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 
 	if (chargeInterval >= 0.2f) {
 		charge = true;
+		JumpCharge = true;
 	}
 	
 	if (!charge || glide) {
@@ -635,7 +637,7 @@ bool AShroommateProtoCharacter::getTPause() {
 	return TPause;
 }
 bool AShroommateProtoCharacter::getJumpCharge() {
-	JumpCharge = ischarging;
+	//JumpCharge = charge;
 	return JumpCharge;
 }
 float AShroommateProtoCharacter::getJumpChrageTimer() {
