@@ -62,6 +62,8 @@ public:
 		bool hascd3;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool hasbattery;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool correctmusic;
 
 	//override BeginPlay() function in UserWidget
 	virtual void BeginPlay() override;
