@@ -335,9 +335,15 @@ void AShroommateProtoCharacter::MoveForward(float Value)
 				walkagain = true;
 			}
 			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Z);
-			AddMovementInput(Direction, Value);
-			FVector Force = FVector(0, 0, 700);
-			GetCharacterMovement()->AddImpulse(Force);
+			if (Value < 0.0) {
+				FVector Force = FVector(0, -1000, 0);
+				GetCharacterMovement()->AddImpulse(Force);
+			}
+			else {
+				AddMovementInput(Direction, Value);
+				FVector Force = FVector(0, 0, 1500);
+				GetCharacterMovement()->AddImpulse(Force);
+			}
 		}
 		
 	}
@@ -358,18 +364,20 @@ void AShroommateProtoCharacter::MoveRight(float Value )
 	if ( (Controller != NULL) && (Value != 0.0f) )
 	{
 		movingR = true;
-		// find out which way is right
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-		// get right vector 
-		if (walkagain) {
-			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-			walkagain = false;
+		if (!canclimb) {
+			// find out which way is right
+			const FRotator Rotation = Controller->GetControlRotation();
+			const FRotator YawRotation(0, Rotation.Yaw, 0);
+			// get right vector 
+			if (walkagain) {
+				GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+				walkagain = false;
+			}
+			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+			// add movement in that direction
+			if (onWall) Value = 0;
+			AddMovementInput(Direction, Value);
 		}
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		// add movement in that direction
-		if (onWall) Value = 0;
-		AddMovementInput(Direction, Value);
 	}
 	else {
 		movingR = false;
