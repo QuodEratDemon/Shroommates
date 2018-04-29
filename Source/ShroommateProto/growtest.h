@@ -47,6 +47,11 @@ public:
 	bool inRenderRange = 0;
 	//set mesh component
 
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+		USoundCue* eatAudioCue;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Audio")
+		UAudioComponent* eatAudioComponent;
 
 protected:
 	// Called when the game starts or when spawned

@@ -90,10 +90,18 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	Level = 1;
 	FoundShroom = false;
 	HasKey = false;
+	HasBoombox = false;
+	HasCD1 = false;
+	HasCD2 = false;
+	HasCD3 = false;
+	HasBattery = false;
 	Sec = 0;
 	SecTen = 0;
 	Min = 0;
 	MinTen = 0;
+	TPause = false;
+	JumpCharge = ischarging;
+	JumpChrageTimer = 0;
 
 	//jump setting
 	jump_height = 2000.f;
@@ -291,6 +299,7 @@ void AShroommateProtoCharacter::ShroomCharge()
 void AShroommateProtoCharacter::ShroomJump()
 {
 	charge = false;
+	JumpCharge = false;
 	ischarging = false;
 	chargeInterval = 0.f;
 	Jump();
@@ -326,9 +335,15 @@ void AShroommateProtoCharacter::MoveForward(float Value)
 				walkagain = true;
 			}
 			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Z);
-			AddMovementInput(Direction, Value);
-			FVector Force = FVector(0, 0, 700);
-			GetCharacterMovement()->AddImpulse(Force);
+			if (Value < 0.0) {
+				FVector Force = FVector(0, -1000, 0);
+				GetCharacterMovement()->AddImpulse(Force);
+			}
+			else {
+				AddMovementInput(Direction, Value);
+				FVector Force = FVector(0, 0, 1500);
+				GetCharacterMovement()->AddImpulse(Force);
+			}
 		}
 		
 	}
@@ -349,18 +364,20 @@ void AShroommateProtoCharacter::MoveRight(float Value )
 	if ( (Controller != NULL) && (Value != 0.0f) )
 	{
 		movingR = true;
-		// find out which way is right
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-		// get right vector 
-		if (walkagain) {
-			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-			walkagain = false;
+		if (!canclimb) {
+			// find out which way is right
+			const FRotator Rotation = Controller->GetControlRotation();
+			const FRotator YawRotation(0, Rotation.Yaw, 0);
+			// get right vector 
+			if (walkagain) {
+				GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+				walkagain = false;
+			}
+			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+			// add movement in that direction
+			if (onWall) Value = 0;
+			AddMovementInput(Direction, Value);
 		}
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		// add movement in that direction
-		if (onWall) Value = 0;
-		AddMovementInput(Direction, Value);
 	}
 	else {
 		movingR = false;
@@ -449,6 +466,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 
 	if (chargeInterval >= 0.2f) {
 		charge = true;
+		JumpCharge = true;
 	}
 	
 	if (!charge || glide) {
@@ -526,6 +544,21 @@ void AShroommateProtoCharacter::setFoundShroom(bool FS) {
 void AShroommateProtoCharacter::setHasKey(bool key) {
 	HasKey = key;
 }
+void AShroommateProtoCharacter::setHasBoombox(bool boombox) {
+	HasBoombox = boombox;
+}
+void AShroommateProtoCharacter::setHasCD1(bool cd1) {
+	HasCD1 = cd1;
+}
+void AShroommateProtoCharacter::setHasCD2(bool cd2) {
+	HasCD2 = cd2;
+}
+void AShroommateProtoCharacter::setHasCD3(bool cd3) {
+	HasCD3 = cd3;
+}
+void AShroommateProtoCharacter::setHasBattery(bool battery) {
+	HasBattery = battery;
+}
 void AShroommateProtoCharacter::setSec(int sec) {
 	Sec = sec;
 }
@@ -538,6 +571,14 @@ void AShroommateProtoCharacter::setMin(int min) {
 void AShroommateProtoCharacter::setMinTen(int minT) {
 	MinTen = minT;
 }
+void AShroommateProtoCharacter::setTPause(bool TP) {
+	TPause = TP;
+}
+void AShroommateProtoCharacter::setJumpChrageTimer(float JCT) {
+	JumpChrageTimer = JCT;
+}
+
+
 
 //UI Getter
 float AShroommateProtoCharacter::getMaxHealth() {
@@ -573,6 +614,21 @@ bool AShroommateProtoCharacter::getFoundShroom() {
 bool AShroommateProtoCharacter::getHasKey() {
 	return HasKey;
 }
+bool AShroommateProtoCharacter::getHasBoombox() {
+	return HasBoombox;
+}
+bool AShroommateProtoCharacter::getHasCD1() {
+	return HasCD1;
+}
+bool AShroommateProtoCharacter::getHasCD2() {
+	return HasCD2;
+}
+bool AShroommateProtoCharacter::getHasCD3() {
+	return HasCD3;
+}
+bool AShroommateProtoCharacter::getHasBattery() {
+	return HasBattery;
+}
 int AShroommateProtoCharacter::getSec() {
 	return Sec;
 }
@@ -584,4 +640,14 @@ int AShroommateProtoCharacter::getMin() {
 }
 int AShroommateProtoCharacter::getMinTen() {
 	return MinTen;
+}
+bool AShroommateProtoCharacter::getTPause() {
+	return TPause;
+}
+bool AShroommateProtoCharacter::getJumpCharge() {
+	//JumpCharge = charge;
+	return JumpCharge;
+}
+float AShroommateProtoCharacter::getJumpChrageTimer() {
+	return JumpChrageTimer;
 }

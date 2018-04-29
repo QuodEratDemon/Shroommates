@@ -163,6 +163,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool HasKey;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool HasBoombox;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool HasCD1;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool HasCD2;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool HasCD3;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool HasBattery;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		int Sec;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		int SecTen;
@@ -170,6 +180,13 @@ public:
 		int Min;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		int MinTen;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool TPause;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool JumpCharge;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		float JumpChrageTimer;
+
 
 
 	//jump
@@ -290,10 +307,18 @@ public:
 	void setLevel(int L);
 	void setFoundShroom(bool FS);
 	void setHasKey(bool key);
+	void setHasBoombox(bool boombox);
+	void setHasCD1(bool cd1);
+	void setHasCD2(bool cd2);
+	void setHasCD3(bool cd3);
+	void setHasBattery(bool battery);
 	void setSec(int sec);
 	void setSecTen(int secT);
 	void setMin(int min);
 	void setMinTen(int minT);
+	void setTPause(bool TP);
+	void setJumpCharge(bool JC);
+	void setJumpChrageTimer(float JCT);
 
 	void setInteract(bool in);
 	bool getInteract();
@@ -310,10 +335,18 @@ public:
 	int getLevel();
 	bool getFoundShroom();
 	bool getHasKey();
+	bool getHasBoombox();
+	bool getHasCD1();
+	bool getHasCD2();
+	bool getHasCD3();
+	bool getHasBattery();
 	int getSec();
 	int getSecTen();
 	int getMin();
 	int getMinTen();
+	bool getTPause();
+	bool getJumpCharge();
+	float getJumpChrageTimer();
 
 };
 
