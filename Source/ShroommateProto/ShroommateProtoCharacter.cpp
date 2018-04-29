@@ -104,7 +104,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	JumpChrageTimer = 0;
 
 	//jump setting
-	jump_height = 2000.f;
+	jump_height = 2500.f;
 	jump_gravity = 10.0f;
 	jump_control = 0.2f;
 
@@ -143,9 +143,11 @@ void AShroommateProtoCharacter::SetupPlayerInputComponent(class UInputComponent*
 	PlayerInputComponent->BindAction("Flatten", IE_Pressed, this, &AShroommateProtoCharacter::Flatten);
 	PlayerInputComponent->BindAction("Flatten", IE_Released, this, &AShroommateProtoCharacter::unFlatten);
 
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AShroommateProtoCharacter::regularJump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AShroommateProtoCharacter::regularJumpStop);
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AShroommateProtoCharacter::ShroomCharge);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AShroommateProtoCharacter::ShroomJump);
+	PlayerInputComponent->BindAction("Charge", IE_Pressed, this, &AShroommateProtoCharacter::ShroomCharge);
+	PlayerInputComponent->BindAction("Charge", IE_Released, this, &AShroommateProtoCharacter::ShroomJump);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AShroommateProtoCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AShroommateProtoCharacter::MoveRight);
@@ -288,6 +290,8 @@ void AShroommateProtoCharacter::LookUpAtRate(float Rate)
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
+
+
 void AShroommateProtoCharacter::ShroomCharge()
 {
 	GetCharacterMovement()->JumpZVelocity = jump_height;
@@ -305,6 +309,21 @@ void AShroommateProtoCharacter::ShroomJump()
 	Jump();
 	//GetCharacterMovement()->JumpZVelocity = jump_height;
 }
+
+void AShroommateProtoCharacter::regularJump()
+{
+	GetCharacterMovement()->JumpZVelocity = jump_height;
+	isJumping = true;
+	Jump();
+}
+
+void AShroommateProtoCharacter::regularJumpStop()
+{
+	isJumping = false;
+	StopJumping();
+}
+
+
 
 void AShroommateProtoCharacter::MoveForward(float Value)
 {
@@ -414,7 +433,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 	if (GetCharacterMovement()->MovementMode == MOVE_Falling) {
 		ASkillTreeController* Controller = Cast<ASkillTreeController>(GetController());
 		if (Controller != NULL) {
-			if (ischarging) {
+			if (ischarging || isJumping) {
 				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), GetVelocity().Z));
 				if (GetVelocity().Z < -2000.0f && glidecheck) {
 					GetCharacterMovement()->GravityScale = 0.5f;
@@ -451,8 +470,8 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 	}
 
 	if (ischarging && !glide) {
-		if (chargeInterval >= 1.f) {
-			if (GetCharacterMovement()->JumpZVelocity < 5000.f) {
+		if (chargeInterval >= 0.125f) {
+			if (GetCharacterMovement()->JumpZVelocity <= 4000.f) {
 				GetCharacterMovement()->JumpZVelocity += chargeLevel;
 
 			}
@@ -464,7 +483,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 		
 	}
 
-	if (chargeInterval >= 0.2f) {
+	if (chargeInterval >= 0.1f) {
 		charge = true;
 		JumpCharge = true;
 	}

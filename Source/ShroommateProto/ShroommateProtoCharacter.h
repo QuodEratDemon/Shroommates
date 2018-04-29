@@ -196,8 +196,10 @@ public:
 
 	bool charge = false;
 	bool ischarging = false;
-	float chargeLevel = 1000.f;
+	float chargeLevel = 500.f;
 	float chargeInterval = 0.f;
+
+	bool isJumping = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool canclimb;
@@ -268,6 +270,8 @@ protected:
 
 	void ShroomCharge();
 	void ShroomJump();
+	void regularJump();
+	void regularJumpStop();
 
 	/** Handler for when a touch input begins. */
 	void TouchStarted(ETouchIndex::Type FingerIndex, FVector Location);
