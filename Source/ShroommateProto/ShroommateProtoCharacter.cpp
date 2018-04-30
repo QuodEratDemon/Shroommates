@@ -12,7 +12,7 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "MySaveGame.h"
-
+#include <cstdlib>
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Blue,text)
 
@@ -324,7 +324,7 @@ void AShroommateProtoCharacter::LookUpAtRate(float Rate)
 		if(BaseRotation.Pitch >= 340){
 			camBoomAdjust = (-340+BaseRotation.Pitch)/65;
 		}else{
-			camBoomAdjust = (abs(20 + BaseRotation.Pitch))/65;
+			camBoomAdjust = (fabs(20 + BaseRotation.Pitch))/65;
 		}
 		//camBoomAdjust = (abs(BaseRotation.Pitch - 0))/45;  //35 because max of 40, min of 5, creates a 35 wide range, normalizing to 0 -> 1 value
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("%f"), camBoomAdjust));
