@@ -286,8 +286,70 @@ void AShroommateProtoCharacter::TurnAtRate(float Rate)
 
 void AShroommateProtoCharacter::LookUpAtRate(float Rate)
 {
-	// calculate delta for this frame from the rate information
-	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+		// calculate delta for this frame from the rate information
+	FRotator BaseRotation = Controller->GetControlRotation();
+	camPitchAdjust -= (Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	if(camPitchAdjust > 360){
+		camPitchAdjust = 0;
+	}else{
+		if (camPitchAdjust < 0){
+			camPitchAdjust = 360;
+		}
+	}
+	if((camPitchAdjust > 45) && (camPitchAdjust < 178)){
+		camPitchAdjust = 45;
+	}
+	if((camPitchAdjust < 270) && (camPitchAdjust > 200)){
+		camPitchAdjust = 270;
+	} //NOT NECESSARY IF RELYING ON ORIGINAL CONTROL
+	
+	if ((BaseRotation.Pitch >0) && (BaseRotation.Pitch < 200) || (BaseRotation.Pitch >= 340)){
+		//originalControl = false;
+		//This is where cinematic trigger is, stop using player rotation, start using cam rotation and boom length
+		if(rotationTransition == false){
+			rotationTransition = true;
+			camPitchAdjust = BaseRotation.Pitch;
+		}
+		BaseRotation.Pitch = camPitchAdjust;
+		if ((BaseRotation.Pitch >0) && (BaseRotation.Pitch < 200) || (BaseRotation.Pitch >= 340)){ //This is the overide for original controls, causes the bump but necessary until entirely flushed out
+		originalControl = false;
+		//BaseRotation.Pitch = camPitchAdjust;
+		FollowCamera->SetWorldRotation(BaseRotation);
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), camPitchAdjust));
+		}
+		//BaseRotation.Pitch = camPitchAdjust;
+		//FollowCamera->SetWorldRotation(BaseRotation);
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), camPitchAdjust));
+		////////////////////Boom length piece, 60deg max, 7 deg start?
+		if(BaseRotation.Pitch >= 340){
+			camBoomAdjust = (-340+BaseRotation.Pitch)/65;
+		}else{
+			camBoomAdjust = (abs(20 + BaseRotation.Pitch))/65;
+		}
+		//camBoomAdjust = (abs(BaseRotation.Pitch - 0))/45;  //35 because max of 40, min of 5, creates a 35 wide range, normalizing to 0 -> 1 value
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("%f"), camBoomAdjust));
+		////camBoomAdjust = (camBoomAdjust*camBoomAdjust)/((2*(camBoomAdjust*camBoomAdjust - camBoomAdjust)) + 1);
+		camBoomAdjust = (camBoomAdjust*camBoomAdjust)*(3-2*camBoomAdjust);  //easing bezier function for smooth enter/exit
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("%f"), camBoomAdjust));
+		camBoomAdjust = (camBoomMax-400)*camBoomAdjust;
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("%f"), camBoomAdjust));
+
+		CameraBoom->TargetArmLength = camBoomMax - camBoomAdjust;
+		if ((BaseRotation.Pitch < 8) || (BaseRotation.Pitch > 260)){
+			originalControl = true;
+		}
+	}
+	if (originalControl == true){
+		rotationTransition = false;
+		if((BaseRotation.Pitch >0) && (BaseRotation.Pitch < 200) || (BaseRotation.Pitch > 340)){
+			CameraBoom->TargetArmLength = camBoomMax - camBoomAdjust;
+		}else{
+			CameraBoom->TargetArmLength = camBoomMax;
+		}
+		AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	}
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::Printf(TEXT("%f"), BaseRotation.Pitch));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), CameraBoom->TargetArmLength));
 }
 
 

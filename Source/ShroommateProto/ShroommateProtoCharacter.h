@@ -91,6 +91,11 @@ class AShroommateProtoCharacter : public ACharacter
 public:
 	AShroommateProtoCharacter();
 
+	float camPitchAdjust = 0.f;
+	bool rotationTransition = false;
+	bool originalControl = true;
+	float camBoomMax = 2000;
+	float camBoomAdjust = 0;
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
