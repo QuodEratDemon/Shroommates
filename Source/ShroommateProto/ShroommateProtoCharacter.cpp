@@ -102,6 +102,8 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	TPause = false;
 	JumpCharge = ischarging;
 	JumpChrageTimer = 0;
+	WindowCheck = false;
+	DoorCheck = false;
 
 	//jump setting
 	jump_height = 2500.f;
@@ -658,7 +660,12 @@ void AShroommateProtoCharacter::setTPause(bool TP) {
 void AShroommateProtoCharacter::setJumpChrageTimer(float JCT) {
 	JumpChrageTimer = JCT;
 }
-
+void AShroommateProtoCharacter::setWindowCheck(bool WC) {
+	WindowCheck = WC;
+}
+void AShroommateProtoCharacter::setDoorCheck(bool DC) {
+	DoorCheck = DC;
+}
 
 
 //UI Getter
@@ -731,4 +738,10 @@ bool AShroommateProtoCharacter::getJumpCharge() {
 }
 float AShroommateProtoCharacter::getJumpChrageTimer() {
 	return JumpChrageTimer;
+}
+bool AShroommateProtoCharacter::getWindowCheck() {
+	return WindowCheck;
+}
+bool AShroommateProtoCharacter::getDoorCheck() {
+	return DoorCheck;
 }

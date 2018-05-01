@@ -191,7 +191,10 @@ public:
 		bool JumpCharge;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		float JumpChrageTimer;
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool WindowCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool DoorCheck;
 
 
 	//jump
@@ -328,6 +331,8 @@ public:
 	void setTPause(bool TP);
 	void setJumpCharge(bool JC);
 	void setJumpChrageTimer(float JCT);
+	void setWindowCheck(bool WC);
+	void setDoorCheck(bool DC);
 
 	void setInteract(bool in);
 	bool getInteract();
@@ -356,6 +361,8 @@ public:
 	bool getTPause();
 	bool getJumpCharge();
 	float getJumpChrageTimer();
+	bool getWindowCheck();
+	bool getDoorCheck();
 
 };
 
