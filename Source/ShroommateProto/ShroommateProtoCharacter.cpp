@@ -13,6 +13,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "MySaveGame.h"
 #include <cstdlib>
+#include <string>
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Blue,text)
 
@@ -106,6 +107,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	DoorCheck = false;
 
 	//jump setting
+	jumpEnabled = true;
 	jump_height = 2500.f;
 	jump_gravity = 10.0f;
 	jump_control = 0.2f;
@@ -376,9 +378,11 @@ void AShroommateProtoCharacter::ShroomJump()
 
 void AShroommateProtoCharacter::regularJump()
 {
-	GetCharacterMovement()->JumpZVelocity = jump_height;
-	isJumping = true;
-	Jump();
+	if (jumpEnabled) {
+		GetCharacterMovement()->JumpZVelocity = jump_height;
+		isJumping = true;
+		Jump();
+	}
 }
 
 void AShroommateProtoCharacter::regularJumpStop()

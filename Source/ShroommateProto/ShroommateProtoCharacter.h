@@ -198,6 +198,9 @@ public:
 
 
 	//jump
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool jumpEnabled;
+
 	float jump_gravity;
 	float jump_height;
 	float jump_control;
