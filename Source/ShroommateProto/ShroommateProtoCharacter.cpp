@@ -565,12 +565,13 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 	}
 
 	if (bIsCrouched) {
-		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
+		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -230.f));
 		GetMesh()->SetRelativeScale3D(FVector(1.f, 1.f, 0.5f));
 
 	}
 	else {
 		GetMesh()->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
+		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -390.f));
 	}
 	
 	FRotator BaseRotation = Controller->GetControlRotation();
