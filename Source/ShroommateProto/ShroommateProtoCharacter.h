@@ -206,11 +206,13 @@ public:
 	float jump_control;
 
 	bool charge = false;
-	bool ischarging = false;
 	float chargeLevel = 500.f;
 	float chargeInterval = 0.f;
 
 	bool isJumping = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool ischarging = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool canclimb;
