@@ -13,7 +13,6 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "MySaveGame.h"
 #include <cstdlib>
-#include <string>
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Blue,text)
 
@@ -45,7 +44,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 2000.0f; // The camera follows at this distance behind the character	
+	CameraBoom->TargetArmLength = 20.0f; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 	// Create a follow camera
@@ -107,9 +106,8 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	DoorCheck = false;
 
 	//jump setting
-	jumpEnabled = true;
-	jump_height = 2500.f;
-	jump_gravity = 10.0f;
+	jump_height = 1000.f;
+	jump_gravity = 1500.f;
 	jump_control = 0.2f;
 
 	GetCharacterMovement()->JumpZVelocity = jump_height;
@@ -326,16 +324,16 @@ void AShroommateProtoCharacter::LookUpAtRate(float Rate)
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), camPitchAdjust));
 		////////////////////Boom length piece, 60deg max, 7 deg start?
 		if(BaseRotation.Pitch >= 340){
-			camBoomAdjust = (-340+BaseRotation.Pitch)/65;
+			camBoomAdjust = (-34+BaseRotation.Pitch)/65;
 		}else{
-			camBoomAdjust = (fabs(20 + BaseRotation.Pitch))/65;
+			camBoomAdjust = (fabs(2 + BaseRotation.Pitch))/65;
 		}
 		//camBoomAdjust = (abs(BaseRotation.Pitch - 0))/45;  //35 because max of 40, min of 5, creates a 35 wide range, normalizing to 0 -> 1 value
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("%f"), camBoomAdjust));
 		////camBoomAdjust = (camBoomAdjust*camBoomAdjust)/((2*(camBoomAdjust*camBoomAdjust - camBoomAdjust)) + 1);
 		camBoomAdjust = (camBoomAdjust*camBoomAdjust)*(3-2*camBoomAdjust);  //easing bezier function for smooth enter/exit
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("%f"), camBoomAdjust));
-		camBoomAdjust = (camBoomMax-400)*camBoomAdjust;
+		camBoomAdjust = (camBoomMax-40)*camBoomAdjust;
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("%f"), camBoomAdjust));
 
 		CameraBoom->TargetArmLength = camBoomMax - camBoomAdjust;
@@ -378,11 +376,9 @@ void AShroommateProtoCharacter::ShroomJump()
 
 void AShroommateProtoCharacter::regularJump()
 {
-	if (jumpEnabled) {
-		GetCharacterMovement()->JumpZVelocity = jump_height;
-		isJumping = true;
-		Jump();
-	}
+	GetCharacterMovement()->JumpZVelocity = jump_height;
+	isJumping = true;
+	Jump();
 }
 
 void AShroommateProtoCharacter::regularJumpStop()
@@ -557,10 +553,10 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 	}
 	
 	if (!charge || glide) {
-		GetCharacterMovement()->MaxWalkSpeed = 1500.f;
+		GetCharacterMovement()->MaxWalkSpeed = 150.f;
 	}
 	else {
-		GetCharacterMovement()->MaxWalkSpeed = 250.f;
+		GetCharacterMovement()->MaxWalkSpeed = 25.f;
 	}
 
 	if (bIsCrouched) {
