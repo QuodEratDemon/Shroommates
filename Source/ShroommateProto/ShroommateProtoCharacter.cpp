@@ -371,11 +371,13 @@ void AShroommateProtoCharacter::ShroomCharge()
 
 void AShroommateProtoCharacter::ShroomJump()
 {
-	charge = false;
-	JumpCharge = false;
-	ischarging = false;
-	chargeInterval = 0.f;
-	Jump();
+	if (jumpEnabled) {
+		charge = false;
+		JumpCharge = false;
+		ischarging = false;
+		chargeInterval = 0.f;
+		Jump();
+	}
 	//GetCharacterMovement()->JumpZVelocity = jump_height;
 }
 
