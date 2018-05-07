@@ -44,7 +44,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 2000.0f; // The camera follows at this distance behind the character	
+	CameraBoom->TargetArmLength = 150.0f; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 	// Create a follow camera
@@ -106,8 +106,8 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	DoorCheck = false;
 
 	//jump setting
-	jump_height = 2500.f;
-	jump_gravity = 10.0f;
+	jump_height = 900.f;
+	jump_gravity = 0.5f;
 	jump_control = 0.2f;
 
 	GetCharacterMovement()->JumpZVelocity = jump_height;
@@ -290,6 +290,7 @@ void AShroommateProtoCharacter::LookUpAtRate(float Rate)
 {
 		// calculate delta for this frame from the rate information
 	FRotator BaseRotation = Controller->GetControlRotation();
+
 	camPitchAdjust -= (Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 	if(camPitchAdjust > 360){
 		camPitchAdjust = 0;
@@ -298,23 +299,27 @@ void AShroommateProtoCharacter::LookUpAtRate(float Rate)
 			camPitchAdjust = 360;
 		}
 	}
-	if((camPitchAdjust > 45) && (camPitchAdjust < 178)){
-		camPitchAdjust = 45;
+	if((camPitchAdjust > 40) && (camPitchAdjust < 178)){
+		camPitchAdjust = 40;
 	}
 	if((camPitchAdjust < 270) && (camPitchAdjust > 200)){
 		camPitchAdjust = 270;
 	} //NOT NECESSARY IF RELYING ON ORIGINAL CONTROL
 	
-	if ((BaseRotation.Pitch >0) && (BaseRotation.Pitch < 200) || (BaseRotation.Pitch >= 340)){
+	if ((BaseRotation.Pitch >0) && (BaseRotation.Pitch < 200) || (BaseRotation.Pitch >= 320)){
 		//originalControl = false;
 		//This is where cinematic trigger is, stop using player rotation, start using cam rotation and boom length
-		if(rotationTransition == false){
-			rotationTransition = true;
-			camPitchAdjust = BaseRotation.Pitch;
+		//if(rotationTransition == false){
+		rotationTransition = true;
+		camPitchAdjust = BaseRotation.Pitch;
+		if ((camPitchAdjust >40) && (camPitchAdjust < 200)){
+			camPitchAdjust = 40;
 		}
+		//}
 		BaseRotation.Pitch = camPitchAdjust;
-		if ((BaseRotation.Pitch >0) && (BaseRotation.Pitch < 200) || (BaseRotation.Pitch >= 340)){ //This is the overide for original controls, causes the bump but necessary until entirely flushed out
-		originalControl = false;
+
+		if ((BaseRotation.Pitch >0) && (BaseRotation.Pitch < 200) || (BaseRotation.Pitch >= 320)){ //This is the overide for original controls, causes the bump but necessary until entirely flushed out
+		//originalControl = false;
 		//BaseRotation.Pitch = camPitchAdjust;
 		FollowCamera->SetWorldRotation(BaseRotation);
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), camPitchAdjust));
@@ -323,27 +328,27 @@ void AShroommateProtoCharacter::LookUpAtRate(float Rate)
 		//FollowCamera->SetWorldRotation(BaseRotation);
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), camPitchAdjust));
 		////////////////////Boom length piece, 60deg max, 7 deg start?
-		if(BaseRotation.Pitch >= 340){
-			camBoomAdjust = (-340+BaseRotation.Pitch)/65;
+		if(BaseRotation.Pitch >= 320){
+			camBoomAdjust = (-320+BaseRotation.Pitch)/80;
 		}else{
-			camBoomAdjust = (fabs(20 + BaseRotation.Pitch))/65;
+			camBoomAdjust = (fabs(40 + BaseRotation.Pitch))/80;
 		}
 		//camBoomAdjust = (abs(BaseRotation.Pitch - 0))/45;  //35 because max of 40, min of 5, creates a 35 wide range, normalizing to 0 -> 1 value
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("%f"), camBoomAdjust));
 		////camBoomAdjust = (camBoomAdjust*camBoomAdjust)/((2*(camBoomAdjust*camBoomAdjust - camBoomAdjust)) + 1);
 		camBoomAdjust = (camBoomAdjust*camBoomAdjust)*(3-2*camBoomAdjust);  //easing bezier function for smooth enter/exit
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("%f"), camBoomAdjust));
-		camBoomAdjust = (camBoomMax-400)*camBoomAdjust;
+		camBoomAdjust = (camBoomMax-50)*camBoomAdjust;
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("%f"), camBoomAdjust));
 
 		CameraBoom->TargetArmLength = camBoomMax - camBoomAdjust;
-		if ((BaseRotation.Pitch < 8) || (BaseRotation.Pitch > 260)){
+		if ((BaseRotation.Pitch < 90) || (BaseRotation.Pitch > 260)){
 			originalControl = true;
 		}
 	}
 	if (originalControl == true){
 		rotationTransition = false;
-		if((BaseRotation.Pitch >0) && (BaseRotation.Pitch < 200) || (BaseRotation.Pitch > 340)){
+		if((BaseRotation.Pitch >0) && (BaseRotation.Pitch < 200) || (BaseRotation.Pitch > 320)){
 			CameraBoom->TargetArmLength = camBoomMax - camBoomAdjust;
 		}else{
 			CameraBoom->TargetArmLength = camBoomMax;
@@ -510,7 +515,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 				}
 			}
 			else {
-				GetCharacterMovement()->GravityScale = 6.0f;
+				GetCharacterMovement()->GravityScale = 1.0f;
 				glide = false;
 				glidecheck = true;
 				if (GetVelocity().Z < 0.0f) {
@@ -523,7 +528,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 	}
 	else {
 		if (GetCharacterMovement()->GravityScale == 0.5f) {
-			GetCharacterMovement()->GravityScale = 6.0f;
+			GetCharacterMovement()->GravityScale = 1.0f;
 		}
 		glide = false;
 	}
@@ -553,7 +558,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 	}
 	
 	if (!charge || glide) {
-		GetCharacterMovement()->MaxWalkSpeed = 1500.f;
+		GetCharacterMovement()->MaxWalkSpeed = 150.f;
 	}
 	else {
 		GetCharacterMovement()->MaxWalkSpeed = 250.f;
@@ -567,6 +572,12 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 	else {
 		GetMesh()->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
 	}
+	
+	FRotator BaseRotation = Controller->GetControlRotation();
+	if ((BaseRotation.Pitch >40) && (BaseRotation.Pitch <200)){
+		BaseRotation.Pitch = 40;
+		Controller->SetControlRotation(BaseRotation);
+	}	
 }
 
 void AShroommateProtoCharacter::SaveGame()
