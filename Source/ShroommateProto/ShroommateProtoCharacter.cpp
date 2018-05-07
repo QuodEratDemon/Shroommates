@@ -106,7 +106,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	DoorCheck = false;
 
 	//jump setting
-	jump_height = 900.f;
+	jump_height = 500.f;
 	jump_gravity = 0.5f;
 	jump_control = 0.2f;
 
@@ -371,19 +371,23 @@ void AShroommateProtoCharacter::ShroomCharge()
 
 void AShroommateProtoCharacter::ShroomJump()
 {
-	charge = false;
-	JumpCharge = false;
-	ischarging = false;
-	chargeInterval = 0.f;
-	Jump();
+	if (jumpEnabled) {
+		charge = false;
+		JumpCharge = false;
+		ischarging = false;
+		chargeInterval = 0.f;
+		Jump();
+	}
 	//GetCharacterMovement()->JumpZVelocity = jump_height;
 }
 
 void AShroommateProtoCharacter::regularJump()
 {
-	GetCharacterMovement()->JumpZVelocity = jump_height;
-	isJumping = true;
-	Jump();
+	if (jumpEnabled) {
+		GetCharacterMovement()->JumpZVelocity = jump_height;
+		isJumping = true;
+		Jump();
+	}
 }
 
 void AShroommateProtoCharacter::regularJumpStop()
