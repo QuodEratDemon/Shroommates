@@ -206,7 +206,7 @@ public:
 	float jump_control;
 
 	bool charge = false;
-	float chargeLevel = 500.f;
+	float chargeLevel = 100.f;
 	float chargeInterval = 0.f;
 
 	bool isJumping = false;

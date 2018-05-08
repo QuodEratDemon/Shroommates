@@ -106,9 +106,9 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	DoorCheck = false;
 
 	//jump setting
-	jump_height = 500.f;
-	jump_gravity = 0.5f;
-	jump_control = 0.2f;
+	jump_height = 350.f;
+	jump_gravity = 0.25f;
+	jump_control = 0.25f;
 
 	GetCharacterMovement()->JumpZVelocity = jump_height;
 	GetCharacterMovement()->AirControl = jump_control;
@@ -544,7 +544,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 
 	if (ischarging && !glide) {
 		if (chargeInterval >= 0.125f) {
-			if (GetCharacterMovement()->JumpZVelocity <= 4000.f) {
+			if (GetCharacterMovement()->JumpZVelocity <= 500.f) {
 				GetCharacterMovement()->JumpZVelocity += chargeLevel;
 
 			}
@@ -565,7 +565,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 		GetCharacterMovement()->MaxWalkSpeed = 150.f;
 	}
 	else {
-		GetCharacterMovement()->MaxWalkSpeed = 250.f;
+		GetCharacterMovement()->MaxWalkSpeed = 50.f;
 	}
 
 	if (bIsCrouched) {
