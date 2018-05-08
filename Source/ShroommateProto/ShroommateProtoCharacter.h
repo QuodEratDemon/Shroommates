@@ -94,7 +94,7 @@ public:
 	float camPitchAdjust = 0.f;
 	bool rotationTransition = false;
 	bool originalControl = true;
-	float camBoomMax = 2000;
+	float camBoomMax = 150;
 	float camBoomAdjust = 0;
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -191,20 +191,28 @@ public:
 		bool JumpCharge;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		float JumpChrageTimer;
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool WindowCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool DoorCheck;
 
 
 	//jump
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool jumpEnabled;
+
 	float jump_gravity;
 	float jump_height;
 	float jump_control;
 
 	bool charge = false;
-	bool ischarging = false;
 	float chargeLevel = 500.f;
 	float chargeInterval = 0.f;
 
 	bool isJumping = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool ischarging = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool canclimb;
@@ -328,6 +336,8 @@ public:
 	void setTPause(bool TP);
 	void setJumpCharge(bool JC);
 	void setJumpChrageTimer(float JCT);
+	void setWindowCheck(bool WC);
+	void setDoorCheck(bool DC);
 
 	void setInteract(bool in);
 	bool getInteract();
@@ -356,6 +366,8 @@ public:
 	bool getTPause();
 	bool getJumpCharge();
 	float getJumpChrageTimer();
+	bool getWindowCheck();
+	bool getDoorCheck();
 
 };
 
