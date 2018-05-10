@@ -63,6 +63,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool hasbattery;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool haskitchenitem;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool correctmusic;
 
 	//override BeginPlay() function in UserWidget
