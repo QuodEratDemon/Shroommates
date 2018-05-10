@@ -106,9 +106,9 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	DoorCheck = false;
 
 	//jump setting
-	jump_height = 250.f;
-	jump_gravity = 1.f;
-	jump_control = 0.25f;
+	jump_height = 225.f;
+	jump_gravity = 0.8f;
+	jump_control = 0.5f;
 
 	GetCharacterMovement()->JumpZVelocity = jump_height;
 	GetCharacterMovement()->AirControl = jump_control;
@@ -502,24 +502,25 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 
 	CheckForInteractable();
 
+	/*
 	//Gliding
 	if (GetCharacterMovement()->MovementMode == MOVE_Falling) {
 		ASkillTreeController* Controller = Cast<ASkillTreeController>(GetController());
 		if (Controller != NULL) {
 			if (ischarging || isJumping) {
 				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), GetVelocity().Z));
-				if (GetVelocity().Z < -2000.0f && glidecheck) {
-					GetCharacterMovement()->GravityScale = 0.5f;
+				if (GetVelocity().Z < -150.0f && glidecheck) {
+					GetCharacterMovement()->GravityScale = 0.05f;
 					glide = true;
 					glidecheck = false;
 				}
-				if (GetVelocity().Z < -500.0f && glide) {
+				if (GetVelocity().Z < -5.0f && glide) {
 					FVector Force = FVector(0, 0, 7000);
 					GetCharacterMovement()->AddImpulse(Force);
 				}
 			}
 			else {
-				GetCharacterMovement()->GravityScale = 1.0f;
+				GetCharacterMovement()->GravityScale = 0.8f;
 				glide = false;
 				glidecheck = true;
 				if (GetVelocity().Z < 0.0f) {
@@ -531,11 +532,13 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 		}
 	}
 	else {
-		if (GetCharacterMovement()->GravityScale == 0.5f) {
-			GetCharacterMovement()->GravityScale = 1.0f;
+		if (GetCharacterMovement()->GravityScale == 0.05f) {
+			GetCharacterMovement()->GravityScale = 0.8f;
 		}
 		glide = false;
 	}
+
+	*/
 
 	if (!movingW && !movingR && canclimb) {
 		FVector Force = FVector(0, 0, 0);
@@ -544,7 +547,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 
 	if (ischarging && !glide) {
 		if (chargeInterval >= 0.125f) {
-			if (GetCharacterMovement()->JumpZVelocity <= 450.f) {
+			if (GetCharacterMovement()->JumpZVelocity <= 325.f) {
 				GetCharacterMovement()->JumpZVelocity += chargeLevel;
 
 			}
