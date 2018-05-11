@@ -104,6 +104,10 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	JumpChrageTimer = 0;
 	WindowCheck = false;
 	DoorCheck = false;
+	CoinFade = false;
+	ObjFade = false;
+	CoinAnimation = false;
+	ObjAnimation = false;
 
 	//jump setting
 	jump_height = 225.f;
@@ -685,7 +689,18 @@ void AShroommateProtoCharacter::setWindowCheck(bool WC) {
 void AShroommateProtoCharacter::setDoorCheck(bool DC) {
 	DoorCheck = DC;
 }
-
+void AShroommateProtoCharacter::setCoinFade(bool CF) {
+	CoinFade = CF;
+}
+void AShroommateProtoCharacter::setObjFade(bool OF) {
+	ObjFade = OF;
+}
+void AShroommateProtoCharacter::setCoinAnimation(bool CA) {
+	CoinAnimation = CA;
+}
+void AShroommateProtoCharacter::setObjAnimation(bool OA) {
+	ObjAnimation = OA;
+}
 
 //UI Getter
 float AShroommateProtoCharacter::getMaxHealth() {
@@ -763,4 +778,16 @@ bool AShroommateProtoCharacter::getWindowCheck() {
 }
 bool AShroommateProtoCharacter::getDoorCheck() {
 	return DoorCheck;
+}
+bool AShroommateProtoCharacter::getCoinFade() {
+	return CoinFade;
+}
+bool AShroommateProtoCharacter::getObjFade() {
+	return ObjFade;
+}
+bool AShroommateProtoCharacter::getCoinAnimation() {
+	return CoinAnimation;
+}
+bool AShroommateProtoCharacter::getObjAnimation() {
+	return ObjAnimation;
 }
