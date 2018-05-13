@@ -587,20 +587,105 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 	}
 
 	if (bIsCrouched) {
-		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -230.f));
+		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -260.f));
 		GetMesh()->SetRelativeScale3D(FVector(1.f, 1.f, 0.5f));
 
 	}
 	else {
 		GetMesh()->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
-		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -390.f));
+		GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -420.f));
 	}
 	
 	FRotator BaseRotation = Controller->GetControlRotation();
 	if ((BaseRotation.Pitch >40) && (BaseRotation.Pitch <200)){
 		BaseRotation.Pitch = 40;
 		Controller->SetControlRotation(BaseRotation);
-	}	
+	}
+
+	cameraIdle(BaseRotation, previousRotation);
+	previousRotation = Controller->GetControlRotation();
+	previousActorRotation = this->GetActorRotation();
+	if(previousActorRotation.Yaw<0){
+		previousActorRotation.Yaw = 360+previousActorRotation.Yaw;
+	}
+}
+
+void AShroommateProtoCharacter::cameraIdle(FRotator currentRotation, FRotator previousRotation){
+	currentDesiredRotation = this->GetActorRotation();
+	if(currentDesiredRotation.Yaw < 0){ //Adjusts controller rotation to be comparable to actor rotation (0->180, -0->-180)
+		currentDesiredRotation.Yaw = 360+currentDesiredRotation.Yaw;
+	}// now you have two variables, ranged 0 to 360. Actor rotation is changed for ease of moving the cam rotation
+
+	if((currentDesiredRotation != previousActorRotation) && (inIdleTransition == true)){ //player moved character while in transition
+		//reset transition variables
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("PLAYER TURNING ACTOR")));
+		idleTransitionTimer = 0;
+		inIdleTransition = false; //rest of function should reset properly
+	}
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::Printf(TEXT("Actor: CurDesRot %f"), currentDesiredRotation.Yaw));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::Printf(TEXT("Actor: PrevRot %f"), previousActorRotation.Yaw));
+
+	if(currentRotation != previousRotation){ //reset timer and bool
+		idleTimer = 400;
+		idleTransitionTimer = 0;
+		inIdleTransition = false;
+		transitionRange = 0;
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Not-Idle")));
+	}else{
+		//continue timer until bool is triggered
+		idleTimer--;
+		if(idleTimer < 0){
+			if(inIdleTransition == false){ //If coming from idle, initialize the transition needs
+				inIdleTransition = true;
+				startingRotation = currentRotation; //for equation starting point reference
+				deltaRotation = currentDesiredRotation.Yaw - currentRotation.Yaw;
+				if(deltaRotation < 0){ //if deltaRotation is negative
+					if((deltaRotation*-1) > 180){ //if results in wrong choice
+						addRotation = true;
+						deltaRotation = 360 + deltaRotation; //do other choice
+					}else{
+						addRotation = false; //do first choice if not worng
+						deltaRotation = deltaRotation*-1;
+					}
+				}else{ //if deltaRotation is positive
+					if(deltaRotation > 180){ //if results in wrong choice
+						addRotation = false;
+						deltaRotation = 360 - deltaRotation; //do other choice
+					}else{
+						addRotation = true; //do first choice if not wrong
+					}
+				}
+			}
+
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::Printf(TEXT("deltaRotation: %f"), deltaRotation));
+			if(deltaRotation <=179){
+				idleTransitionTimer++;
+				if (idleTransitionTimer <= idleTransitionTimerMax){ //while in transition
+					transitionRange = idleTransitionTimer/idleTransitionTimerMax;
+					transitionRange = sin(3.14159*transitionRange/2);
+					//transitionRange = (transitionRange*transitionRange)*(3-2*transitionRange); //new 0->1 range with easing function. Has ease in so don't use
+					transitionRange = transitionRange*deltaRotation;
+					//now transition range is the new rotation to be added to startingRotation
+					//currentRotation.Yaw = (startingRotation.Yaw + transitionRange);
+					if (addRotation == true){
+						currentRotation.Yaw = (startingRotation.Yaw + transitionRange);
+					}else{
+						currentRotation.Yaw = (startingRotation.Yaw - transitionRange);
+					}	
+					if(currentRotation.Yaw < 0){
+						currentRotation.Yaw = 360+ currentRotation.Yaw;
+					}
+					if(currentRotation.Yaw > 360){
+						currentRotation.Yaw = currentRotation.Yaw-360;
+					}
+					Controller->SetControlRotation(currentRotation);
+				}
+			}
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::Printf(TEXT("In Transition")));
+		} else{
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Idle")));
+		}
+	}
 }
 
 void AShroommateProtoCharacter::SaveGame()
