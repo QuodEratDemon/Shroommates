@@ -97,6 +97,20 @@ public:
 	float camBoomMax = 150;
 	float camBoomAdjust = 0;
 
+	FRotator previousRotation;
+	FRotator currentRotation;
+	FRotator currentDesiredRotation;
+	FRotator previousActorRotation;
+	FRotator startingRotation;
+	bool inIdleTransition = false;
+	bool addRotation = false;
+	int idleTimer = 400;
+	float idleTransitionTimer = 0;
+	float idleTransitionTimerMax = 130;
+	float deltaRotation = 0;
+	float transitionRange = 0;
+	bool playerRotatingActor = false;
+
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseTurnRate;
@@ -218,6 +232,7 @@ public:
 
 	bool isJumping = false;
 
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool ischarging = false;
 
@@ -287,6 +302,8 @@ protected:
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	 */
 	void LookUpAtRate(float Rate);
+
+	void cameraIdle(FRotator currentRotation, FRotator previousRotation);
 
 	void ShroomCharge();
 	void ShroomJump();
