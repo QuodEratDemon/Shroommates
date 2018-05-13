@@ -218,6 +218,7 @@ public:
 
 	bool isJumping = false;
 
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool ischarging = false;
 
