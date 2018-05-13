@@ -367,10 +367,11 @@ void AShroommateProtoCharacter::LookUpAtRate(float Rate)
 
 void AShroommateProtoCharacter::ShroomCharge()
 {
-	GetCharacterMovement()->JumpZVelocity = jump_height;
-	
-	ischarging = true;
-	
+	if (jumpEnabled) {
+		GetCharacterMovement()->JumpZVelocity = jump_height;
+
+		ischarging = true;
+	}
 }
 
 void AShroommateProtoCharacter::ShroomJump()
