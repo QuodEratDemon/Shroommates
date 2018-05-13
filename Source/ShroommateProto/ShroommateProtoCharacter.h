@@ -195,7 +195,14 @@ public:
 		bool WindowCheck;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool DoorCheck;
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool CoinFade;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool ObjFade;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool CoinAnimation;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool ObjAnimation;
 
 	//jump
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
@@ -338,6 +345,10 @@ public:
 	void setJumpChrageTimer(float JCT);
 	void setWindowCheck(bool WC);
 	void setDoorCheck(bool DC);
+	void setCoinFade(bool CF);
+	void setObjFade(bool OF);
+	void setCoinAnimation(bool CA);
+	void setObjAnimation(bool OA);
 
 	void setInteract(bool in);
 	bool getInteract();
@@ -368,6 +379,9 @@ public:
 	float getJumpChrageTimer();
 	bool getWindowCheck();
 	bool getDoorCheck();
-
+	bool getCoinFade();
+	bool getObjFade();
+	bool getCoinAnimation();
+	bool getObjAnimation();
 };
 
