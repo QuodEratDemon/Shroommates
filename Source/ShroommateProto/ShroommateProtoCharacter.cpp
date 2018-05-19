@@ -194,7 +194,7 @@ void AShroommateProtoCharacter::CheckForInteractable() {
 	FHitResult HitResult;
 
 	//FVector StartTrace = FollowCamera->GetComponentLocation();
-	//FVector EndTrace = (FollowCamera->GetForwardVector() * 300) + StartTrace;
+	//FVector EndTrace = (FollowCamera->GetForwardVector() * 200.f) + StartTrace;
 
 	FVector StartTrace = GetActorLocation();
 	FVector EndTrace = (GetActorForwardVector() * 50.f) + StartTrace;

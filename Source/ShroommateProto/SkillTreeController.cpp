@@ -16,6 +16,7 @@ ASkillTreeController::ASkillTreeController()
 	hascd3 = false;
 	hasbattery = false;
 	haskitchenitem = false;
+	hasspinach = false;
 	correctmusic = false;
 }
 
