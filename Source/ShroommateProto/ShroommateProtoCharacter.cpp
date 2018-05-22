@@ -619,10 +619,15 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 }
 
 void AShroommateProtoCharacter::cameraIdle(FRotator currentRotation, FRotator previousRotation){
-	currentDesiredRotation = this->GetActorRotation();
-	if(currentDesiredRotation.Yaw < 0){ //Adjusts controller rotation to be comparable to actor rotation (0->180, -0->-180)
-		currentDesiredRotation.Yaw = 360+currentDesiredRotation.Yaw;
-	}// now you have two variables, ranged 0 to 360. Actor rotation is changed for ease of moving the cam rotation
+	if (cameraGuideMode){
+		currentDesiredRotation.Yaw = cameraYawOverride;
+		currentDesiredRotation.Pitch = cameraPitchOverride;
+	}else{
+		currentDesiredRotation = this->GetActorRotation();
+		if(currentDesiredRotation.Yaw < 0){ //Adjusts controller rotation to be comparable to actor rotation (0->180, -0->-180)
+			currentDesiredRotation.Yaw = 360+currentDesiredRotation.Yaw;
+		}// now you have two variables, ranged 0 to 360. Actor rotation is changed for ease of moving the cam rotation
+	}
 
 	if((currentDesiredRotation != previousActorRotation) && (inIdleTransition == true)){ //player moved character while in transition
 		//reset transition variables
@@ -633,7 +638,7 @@ void AShroommateProtoCharacter::cameraIdle(FRotator currentRotation, FRotator pr
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::Printf(TEXT("Actor: CurDesRot %f"), currentDesiredRotation.Yaw));
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::Printf(TEXT("Actor: PrevRot %f"), previousActorRotation.Yaw));
 
-	if(currentRotation != previousRotation){ //reset timer and bool
+	if(currentRotation.Yaw != previousRotation.Yaw){ //reset timer and bool
 		idleTimer = 400;
 		idleTransitionTimer = 0;
 		inIdleTransition = false;
@@ -689,6 +694,55 @@ void AShroommateProtoCharacter::cameraIdle(FRotator currentRotation, FRotator pr
 					Controller->SetControlRotation(currentRotation);
 				}
 			}
+
+			//Pitch component to camera guide
+			if((cameraGuideMode) && (idleTimer < 0)){ //Deciding how to add/subtract deltaRot in order to move properly
+				deltaRotation = fabs(currentDesiredRotation.Pitch - currentRotation.Pitch);
+				if (deltaRotation >= 180){
+					deltaRotation = 360 - deltaRotation;
+				}
+
+				if(currentDesiredRotation.Pitch < currentRotation.Pitch){
+					if(currentDesiredRotation.Pitch < 269){
+						addRotation = true;
+					}else{
+						addRotation = false;
+					}
+				}else{ // if(goal > cur)
+					if(currentDesiredRotation.Pitch > 269){
+						addRotation = true;
+					}else{
+						addRotation = false;
+					}
+				}
+				if(currentRotation.Pitch < 91){
+					addRotation = !addRotation; //shortcut to not write out above statement check again
+				}
+
+				if (idleTransitionTimer <= idleTransitionTimerMax){ //while in transition
+					transitionRange = idleTransitionTimer/idleTransitionTimerMax;
+					transitionRange = sin(3.14159*transitionRange/2); //ease out, not in, due to constant reset if moving
+					transitionRange = transitionRange*deltaRotation; //Scaling percent to total movement space
+					//now transition range is the new rotation to be added to startingRotation
+					//currentRotation.Yaw = (startingRotation.Yaw + transitionRange);
+					if (addRotation == true){
+						currentRotation.Pitch = (currentRotation.Pitch + transitionRange);
+					}else{
+						currentRotation.Pitch = (currentRotation.Pitch - transitionRange);
+					}	
+					if(currentRotation.Pitch < 0){
+						currentRotation.Pitch = 360+ currentRotation.Pitch;
+					}
+					if(currentRotation.Pitch > 360){
+						currentRotation.Pitch = currentRotation.Pitch-360;
+					}
+					Controller->SetControlRotation(currentRotation);
+					//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::Printf(TEXT("Actor: CurDesPitchRot %f"), currentDesiredRotation.Pitch));
+					//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Actor: deltaRotationPitch %f"), deltaRotation));
+					//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Actor: CurPitchRot %f"), currentRotation.Pitch));
+				}
+			}
+
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::Printf(TEXT("In Transition")));
 		} else{
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Idle")));

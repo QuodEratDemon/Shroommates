@@ -97,6 +97,18 @@ public:
 	float camBoomMax = 150;
 	float camBoomAdjust = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Camera)
+	float cameraPitchOverride;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Camera)
+	float cameraYawOverride;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Camera)
+	bool cameraGuideMode;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Camera)
+	int idleTimer = 400;
+
 	FRotator previousRotation;
 	FRotator currentRotation;
 	FRotator currentDesiredRotation;
@@ -104,7 +116,6 @@ public:
 	FRotator startingRotation;
 	bool inIdleTransition = false;
 	bool addRotation = false;
-	int idleTimer = 400;
 	float idleTransitionTimer = 0;
 	float idleTransitionTimerMax = 130;
 	float deltaRotation = 0;
