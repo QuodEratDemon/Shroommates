@@ -108,6 +108,11 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	ObjFade = false;
 	CoinAnimation = false;
 	ObjAnimation = false;
+	KitchenCheck = false;
+	BedroomCheck = false;
+	SpinachCheck = false;
+	SoapCheck = false;
+	PepperCheck = false;
 
 	//jump setting
 	jump_height = 225.f;
@@ -800,6 +805,21 @@ void AShroommateProtoCharacter::setCoinAnimation(bool CA) {
 void AShroommateProtoCharacter::setObjAnimation(bool OA) {
 	ObjAnimation = OA;
 }
+void AShroommateProtoCharacter::setKitchenCheck(bool KC) {
+	KitchenCheck = KC;
+}
+void AShroommateProtoCharacter::setBedroomCheck(bool BC) {
+	BedroomCheck = BC;
+}
+void AShroommateProtoCharacter::setSpinachCheck(bool SC) {
+	SpinachCheck = SC;
+}
+void AShroommateProtoCharacter::setSoapCheck(bool SoapC) {
+	SoapCheck = SoapC;
+}
+void AShroommateProtoCharacter::setPepperCheck(bool PC) {
+	PepperCheck = PC;
+}
 
 //UI Getter
 float AShroommateProtoCharacter::getMaxHealth() {
@@ -889,4 +909,19 @@ bool AShroommateProtoCharacter::getCoinAnimation() {
 }
 bool AShroommateProtoCharacter::getObjAnimation() {
 	return ObjAnimation;
+}
+bool AShroommateProtoCharacter::getKitchenCheck() {
+	return KitchenCheck;
+}
+bool AShroommateProtoCharacter::getBedroomCheck() {
+	return BedroomCheck;
+}
+bool AShroommateProtoCharacter::getSpinachCheck() {
+	return SpinachCheck;
+}
+bool AShroommateProtoCharacter::getSoapCheck() {
+	return SoapCheck;
+}
+bool AShroommateProtoCharacter::getPepperCheck() {
+	return PepperCheck;
 }
