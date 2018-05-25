@@ -114,6 +114,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	SoapCheck = false;
 	PepperCheck = false;
 	CanEatCheck = true;
+	FoodCounter = 15;
 
 	//jump setting
 	jump_height = 225.f;
@@ -878,6 +879,9 @@ void AShroommateProtoCharacter::setPepperCheck(bool PC) {
 void AShroommateProtoCharacter::setCanEatCheck(bool CEC) {
 	CanEatCheck = CEC;
 }
+void AShroommateProtoCharacter::setFoodCounter(int FC) {
+	FoodCounter = FC;
+}
 
 
 //UI Getter
@@ -986,4 +990,7 @@ bool AShroommateProtoCharacter::getPepperCheck() {
 }
 bool AShroommateProtoCharacter::getCanEatCheck() {
 	return CanEatCheck;
+}
+int AShroommateProtoCharacter::getFoodCounter() {
+	return FoodCounter;
 }
