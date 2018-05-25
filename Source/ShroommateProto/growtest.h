@@ -37,7 +37,9 @@ public:
 	//bool for key press interaction if needed
 	bool consume = 0;
 	bool inConsumeRange = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 	bool eaten = 0;
+
 	AActor* contact;
 
 	float respawn = 0.f;

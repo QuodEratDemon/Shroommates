@@ -113,6 +113,8 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	SpinachCheck = false;
 	SoapCheck = false;
 	PepperCheck = false;
+	CanEatCheck = true;
+	FoodCounter = 15;
 
 	//jump setting
 	jump_height = 225.f;
@@ -874,6 +876,13 @@ void AShroommateProtoCharacter::setSoapCheck(bool SoapC) {
 void AShroommateProtoCharacter::setPepperCheck(bool PC) {
 	PepperCheck = PC;
 }
+void AShroommateProtoCharacter::setCanEatCheck(bool CEC) {
+	CanEatCheck = CEC;
+}
+void AShroommateProtoCharacter::setFoodCounter(int FC) {
+	FoodCounter = FC;
+}
+
 
 //UI Getter
 float AShroommateProtoCharacter::getMaxHealth() {
@@ -978,4 +987,10 @@ bool AShroommateProtoCharacter::getSoapCheck() {
 }
 bool AShroommateProtoCharacter::getPepperCheck() {
 	return PepperCheck;
+}
+bool AShroommateProtoCharacter::getCanEatCheck() {
+	return CanEatCheck;
+}
+int AShroommateProtoCharacter::getFoodCounter() {
+	return FoodCounter;
 }
