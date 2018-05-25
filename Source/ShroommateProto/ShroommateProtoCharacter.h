@@ -238,6 +238,10 @@ public:
 		bool SoapCheck;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool PepperCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool CanEatCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int FoodCounter;
 
 	//jump
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
@@ -392,6 +396,8 @@ public:
 	void setSpinachCheck(bool SC);
 	void setSoapCheck(bool SoapC);
 	void setPepperCheck(bool PC);
+	void setCanEatCheck(bool CEC);
+	void setFoodCounter(int FC);
 
 	void setInteract(bool in);
 	bool getInteract();
@@ -431,5 +437,8 @@ public:
 	bool getSpinachCheck();
 	bool getSoapCheck();
 	bool getPepperCheck();
+	bool getCanEatCheck();
+	int getFoodCounter();
+
 };
 
