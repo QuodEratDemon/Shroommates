@@ -68,6 +68,8 @@ public:
 		bool hasspinach;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool correctmusic;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool cdplaying;
 
 	//override BeginPlay() function in UserWidget
 	virtual void BeginPlay() override;
