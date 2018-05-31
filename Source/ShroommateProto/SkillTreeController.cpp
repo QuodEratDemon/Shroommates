@@ -16,7 +16,9 @@ ASkillTreeController::ASkillTreeController()
 	hascd3 = false;
 	hasbattery = false;
 	haskitchenitem = false;
+	hasspinach = false;
 	correctmusic = false;
+	cdplaying = false;
 }
 
 void ASkillTreeController::BeginPlay()

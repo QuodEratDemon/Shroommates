@@ -108,6 +108,13 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	ObjFade = false;
 	CoinAnimation = false;
 	ObjAnimation = false;
+	KitchenCheck = false;
+	BedroomCheck = false;
+	SpinachCheck = false;
+	SoapCheck = false;
+	PepperCheck = false;
+	CanEatCheck = true;
+	FoodCounter = 15;
 
 	//jump setting
 	jump_height = 225.f;
@@ -194,7 +201,7 @@ void AShroommateProtoCharacter::CheckForInteractable() {
 	FHitResult HitResult;
 
 	//FVector StartTrace = FollowCamera->GetComponentLocation();
-	//FVector EndTrace = (FollowCamera->GetForwardVector() * 300) + StartTrace;
+	//FVector EndTrace = (FollowCamera->GetForwardVector() * 200.f) + StartTrace;
 
 	FVector StartTrace = GetActorLocation();
 	FVector EndTrace = (GetActorForwardVector() * 50.f) + StartTrace;
@@ -444,12 +451,14 @@ void AShroommateProtoCharacter::MoveForward(float Value)
 			}
 			const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Z);
 			if (Value < 0.0) {
-				FVector Force = FVector(0, -1000, 0);
+				const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+				AddMovementInput(Direction, Value);
+				FVector Force = FVector(0, -500, 0);
 				GetCharacterMovement()->AddImpulse(Force);
 			}
 			else {
 				AddMovementInput(Direction, Value);
-				FVector Force = FVector(0, 0, 1500);
+				FVector Force = FVector(0, 0, 500);
 				GetCharacterMovement()->AddImpulse(Force);
 			}
 		}
@@ -612,10 +621,15 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 }
 
 void AShroommateProtoCharacter::cameraIdle(FRotator currentRotation, FRotator previousRotation){
-	currentDesiredRotation = this->GetActorRotation();
-	if(currentDesiredRotation.Yaw < 0){ //Adjusts controller rotation to be comparable to actor rotation (0->180, -0->-180)
-		currentDesiredRotation.Yaw = 360+currentDesiredRotation.Yaw;
-	}// now you have two variables, ranged 0 to 360. Actor rotation is changed for ease of moving the cam rotation
+	if (cameraGuideMode){
+		currentDesiredRotation.Yaw = cameraYawOverride;
+		currentDesiredRotation.Pitch = cameraPitchOverride;
+	}else{
+		currentDesiredRotation = this->GetActorRotation();
+		if(currentDesiredRotation.Yaw < 0){ //Adjusts controller rotation to be comparable to actor rotation (0->180, -0->-180)
+			currentDesiredRotation.Yaw = 360+currentDesiredRotation.Yaw;
+		}// now you have two variables, ranged 0 to 360. Actor rotation is changed for ease of moving the cam rotation
+	}
 
 	if((currentDesiredRotation != previousActorRotation) && (inIdleTransition == true)){ //player moved character while in transition
 		//reset transition variables
@@ -626,7 +640,7 @@ void AShroommateProtoCharacter::cameraIdle(FRotator currentRotation, FRotator pr
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::Printf(TEXT("Actor: CurDesRot %f"), currentDesiredRotation.Yaw));
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::Printf(TEXT("Actor: PrevRot %f"), previousActorRotation.Yaw));
 
-	if(currentRotation != previousRotation){ //reset timer and bool
+	if(currentRotation.Yaw != previousRotation.Yaw){ //reset timer and bool
 		idleTimer = 400;
 		idleTransitionTimer = 0;
 		inIdleTransition = false;
@@ -682,6 +696,55 @@ void AShroommateProtoCharacter::cameraIdle(FRotator currentRotation, FRotator pr
 					Controller->SetControlRotation(currentRotation);
 				}
 			}
+
+			//Pitch component to camera guide
+			if((cameraGuideMode) && (idleTimer < 0)){ //Deciding how to add/subtract deltaRot in order to move properly
+				deltaRotation = fabs(currentDesiredRotation.Pitch - currentRotation.Pitch);
+				if (deltaRotation >= 180){
+					deltaRotation = 360 - deltaRotation;
+				}
+
+				if(currentDesiredRotation.Pitch < currentRotation.Pitch){
+					if(currentDesiredRotation.Pitch < 269){
+						addRotation = true;
+					}else{
+						addRotation = false;
+					}
+				}else{ // if(goal > cur)
+					if(currentDesiredRotation.Pitch > 269){
+						addRotation = true;
+					}else{
+						addRotation = false;
+					}
+				}
+				if(currentRotation.Pitch < 91){
+					addRotation = !addRotation; //shortcut to not write out above statement check again
+				}
+
+				if (idleTransitionTimer <= idleTransitionTimerMax){ //while in transition
+					transitionRange = idleTransitionTimer/idleTransitionTimerMax;
+					transitionRange = sin(3.14159*transitionRange/2); //ease out, not in, due to constant reset if moving
+					transitionRange = transitionRange*deltaRotation; //Scaling percent to total movement space
+					//now transition range is the new rotation to be added to startingRotation
+					//currentRotation.Yaw = (startingRotation.Yaw + transitionRange);
+					if (addRotation == true){
+						currentRotation.Pitch = (currentRotation.Pitch + transitionRange);
+					}else{
+						currentRotation.Pitch = (currentRotation.Pitch - transitionRange);
+					}	
+					if(currentRotation.Pitch < 0){
+						currentRotation.Pitch = 360+ currentRotation.Pitch;
+					}
+					if(currentRotation.Pitch > 360){
+						currentRotation.Pitch = currentRotation.Pitch-360;
+					}
+					Controller->SetControlRotation(currentRotation);
+					//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::Printf(TEXT("Actor: CurDesPitchRot %f"), currentDesiredRotation.Pitch));
+					//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Actor: deltaRotationPitch %f"), deltaRotation));
+					//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("Actor: CurPitchRot %f"), currentRotation.Pitch));
+				}
+			}
+
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::Printf(TEXT("In Transition")));
 		} else{
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Idle")));
@@ -798,6 +861,28 @@ void AShroommateProtoCharacter::setCoinAnimation(bool CA) {
 void AShroommateProtoCharacter::setObjAnimation(bool OA) {
 	ObjAnimation = OA;
 }
+void AShroommateProtoCharacter::setKitchenCheck(bool KC) {
+	KitchenCheck = KC;
+}
+void AShroommateProtoCharacter::setBedroomCheck(bool BC) {
+	BedroomCheck = BC;
+}
+void AShroommateProtoCharacter::setSpinachCheck(bool SC) {
+	SpinachCheck = SC;
+}
+void AShroommateProtoCharacter::setSoapCheck(bool SoapC) {
+	SoapCheck = SoapC;
+}
+void AShroommateProtoCharacter::setPepperCheck(bool PC) {
+	PepperCheck = PC;
+}
+void AShroommateProtoCharacter::setCanEatCheck(bool CEC) {
+	CanEatCheck = CEC;
+}
+void AShroommateProtoCharacter::setFoodCounter(int FC) {
+	FoodCounter = FC;
+}
+
 
 //UI Getter
 float AShroommateProtoCharacter::getMaxHealth() {
@@ -887,4 +972,25 @@ bool AShroommateProtoCharacter::getCoinAnimation() {
 }
 bool AShroommateProtoCharacter::getObjAnimation() {
 	return ObjAnimation;
+}
+bool AShroommateProtoCharacter::getKitchenCheck() {
+	return KitchenCheck;
+}
+bool AShroommateProtoCharacter::getBedroomCheck() {
+	return BedroomCheck;
+}
+bool AShroommateProtoCharacter::getSpinachCheck() {
+	return SpinachCheck;
+}
+bool AShroommateProtoCharacter::getSoapCheck() {
+	return SoapCheck;
+}
+bool AShroommateProtoCharacter::getPepperCheck() {
+	return PepperCheck;
+}
+bool AShroommateProtoCharacter::getCanEatCheck() {
+	return CanEatCheck;
+}
+int AShroommateProtoCharacter::getFoodCounter() {
+	return FoodCounter;
 }

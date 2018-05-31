@@ -97,6 +97,18 @@ public:
 	float camBoomMax = 150;
 	float camBoomAdjust = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Camera)
+	float cameraPitchOverride;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Camera)
+	float cameraYawOverride;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Camera)
+	bool cameraGuideMode;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Camera)
+	int idleTimer = 400;
+
 	FRotator previousRotation;
 	FRotator currentRotation;
 	FRotator currentDesiredRotation;
@@ -104,7 +116,6 @@ public:
 	FRotator startingRotation;
 	bool inIdleTransition = false;
 	bool addRotation = false;
-	int idleTimer = 400;
 	float idleTransitionTimer = 0;
 	float idleTransitionTimerMax = 130;
 	float deltaRotation = 0;
@@ -217,6 +228,20 @@ public:
 		bool CoinAnimation;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool ObjAnimation;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool KitchenCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool BedroomCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool SpinachCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool SoapCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool PepperCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool CanEatCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		int FoodCounter;
 
 	//jump
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
@@ -358,7 +383,7 @@ public:
 	void setMin(int min);
 	void setMinTen(int minT);
 	void setTPause(bool TP);
-	void setJumpCharge(bool JC);
+	//void setJumpCharge(bool JC);
 	void setJumpChrageTimer(float JCT);
 	void setWindowCheck(bool WC);
 	void setDoorCheck(bool DC);
@@ -366,6 +391,13 @@ public:
 	void setObjFade(bool OF);
 	void setCoinAnimation(bool CA);
 	void setObjAnimation(bool OA);
+	void setKitchenCheck(bool KC);
+	void setBedroomCheck(bool BC);
+	void setSpinachCheck(bool SC);
+	void setSoapCheck(bool SoapC);
+	void setPepperCheck(bool PC);
+	void setCanEatCheck(bool CEC);
+	void setFoodCounter(int FC);
 
 	void setInteract(bool in);
 	bool getInteract();
@@ -400,5 +432,13 @@ public:
 	bool getObjFade();
 	bool getCoinAnimation();
 	bool getObjAnimation();
+	bool getKitchenCheck();
+	bool getBedroomCheck();
+	bool getSpinachCheck();
+	bool getSoapCheck();
+	bool getPepperCheck();
+	bool getCanEatCheck();
+	int getFoodCounter();
+
 };
 
