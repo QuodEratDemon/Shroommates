@@ -124,7 +124,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	GetCharacterMovement()->JumpZVelocity = jump_height;
 	GetCharacterMovement()->AirControl = jump_control;
 	GetCharacterMovement()->GravityScale = jump_gravity;
-	GetCharacterMovement()->MaxAcceleration = 350.0f;
+
 
 	canclimb = false;
 	walkagain = false;
@@ -137,7 +137,6 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 
 	glidecheck = true;
 	glide = false;
-
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -409,7 +408,7 @@ void AShroommateProtoCharacter::regularJump()
 {
 	if (jumpEnabled) {
 		GetCharacterMovement()->JumpZVelocity = jump_height;
-		//isJumping = true;
+		isJumping = true;
 		Jump();
 	}
 }
@@ -424,9 +423,7 @@ void AShroommateProtoCharacter::regularJumpStop()
 
 void AShroommateProtoCharacter::MoveForward(float Value)
 {
-	if (PepperCheck) {
-		Value = 2.f;
-	}
+
 
 	if ((Controller != NULL) && (Value != 0.0f) )
 	{
@@ -621,15 +618,6 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 	if(previousActorRotation.Yaw<0){
 		previousActorRotation.Yaw = 360+previousActorRotation.Yaw;
 	}
-
-	//Pepper jump
-	if (PepperCheck) {
-
-		UGameplayStatics::SpawnEmitterAtLocation(this, smokeFX, GetActorLocation()) ->SetRelativeScale3D(FVector(0.15f,0.15f,0.15f));
-		MoveForward(2.f);
-		regularJump();
-	}
-	
 }
 
 void AShroommateProtoCharacter::cameraIdle(FRotator currentRotation, FRotator previousRotation){

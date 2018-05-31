@@ -97,9 +97,6 @@ public:
 	float camBoomMax = 150;
 	float camBoomAdjust = 0;
 
-	UPROPERTY(EditAnywhere, Category = Camera)
-		UParticleSystem* smokeFX;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Camera)
 	float cameraPitchOverride;
 
@@ -260,8 +257,6 @@ public:
 
 	bool isJumping = false;
 
-	UParticleSystemComponent* help;
-
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool ischarging = false;
@@ -345,8 +340,6 @@ protected:
 
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
-
-	
 
 protected:
 	// APawn interface
