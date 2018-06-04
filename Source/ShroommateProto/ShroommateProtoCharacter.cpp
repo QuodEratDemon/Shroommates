@@ -115,6 +115,15 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	PepperCheck = false;
 	CanEatCheck = true;
 	FoodCounter = 15;
+	MamaTalkCheck = false;
+	RescueBabyCheck = false;
+	BabyDropCheck = false;
+	MakeNoiseCheck = false;
+	RescueGrandCheck = false;
+	DropGrandCheck = false;
+	KitchenLevelCheck = false;
+	BedroomLevelCheck = false;
+
 
 	//jump setting
 	jump_height = 225.f;
@@ -895,6 +904,31 @@ void AShroommateProtoCharacter::setFoodCounter(int FC) {
 	FoodCounter = FC;
 }
 
+void AShroommateProtoCharacter::setMamaTalkCheck(bool MTC) {
+	MamaTalkCheck = MTC;
+}
+void AShroommateProtoCharacter::setRescueBabyCheck(bool RBC) {
+	RescueBabyCheck = RBC;
+}
+void AShroommateProtoCharacter::setBabyDropCheck(bool BDC) {
+	BabyDropCheck = BDC;
+}
+void AShroommateProtoCharacter::setMakeNoiseCheck(bool MNC) {
+	MakeNoiseCheck = MNC;
+}
+void AShroommateProtoCharacter::setRescueGrandCheck(bool RGC) {
+	RescueGrandCheck = RGC;
+}
+void AShroommateProtoCharacter::setDropGrandCheck(bool DGC) {
+	DropGrandCheck = DGC;
+}
+void AShroommateProtoCharacter::setKitchenLevelCheck(bool KLC) {
+	KitchenLevelCheck = KLC;
+}
+void AShroommateProtoCharacter::setBedroomLevelCheck(bool BLC) {
+	BedroomLevelCheck = BLC;
+}
+
 
 //UI Getter
 float AShroommateProtoCharacter::getMaxHealth() {
@@ -1005,4 +1039,28 @@ bool AShroommateProtoCharacter::getCanEatCheck() {
 }
 int AShroommateProtoCharacter::getFoodCounter() {
 	return FoodCounter;
+}
+bool AShroommateProtoCharacter::getMamaTalkCheck() {
+	return MamaTalkCheck;
+}
+bool AShroommateProtoCharacter::getRescueBabyCheck() {
+	return RescueBabyCheck;
+}
+bool AShroommateProtoCharacter::getBabyDropCheck() {
+	return BabyDropCheck;
+}
+bool AShroommateProtoCharacter::getMakeNoiseCheck() {
+	return MakeNoiseCheck;
+}
+bool AShroommateProtoCharacter::getRescueGrandCheck() {
+	return RescueGrandCheck;
+}
+bool AShroommateProtoCharacter::getDropGrandCheck() {
+	return DropGrandCheck;
+}
+bool AShroommateProtoCharacter::getKitchenLevelCheck() {
+	return KitchenLevelCheck;
+}
+bool AShroommateProtoCharacter::getBedroomLevelCheck() {
+	return BedroomLevelCheck;
 }
