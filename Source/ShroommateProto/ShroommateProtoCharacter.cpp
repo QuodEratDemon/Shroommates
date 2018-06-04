@@ -520,11 +520,13 @@ void AShroommateProtoCharacter::MoveRight(float Value )
 
 void AShroommateProtoCharacter::Flatten(){
 	Crouch();
+	crouched = true;
 	
 	//SetActorRelativeScale3D(oScale * FVector(1.f,1.f,0.5f));
 }
 void AShroommateProtoCharacter::unFlatten() {
 	UnCrouch();
+	crouched = false;
 	GetMesh()->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
 	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 
@@ -546,7 +548,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 		if (Controller != NULL) {
 			if (ischarging || isJumping) {
 				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), GetVelocity().Z));
-				if (GetVelocity().Z < -125.0f && glidecheck) {
+				if (GetVelocity().Z < -125.0f && !PepperCheck) {   //Richard:  Used to be "if (GetVelocity().Z < -125.0f && glidecheck)", changed to allow gliding from holding space off of objects after jump, and making sure pepper still works as intended
 					GetCharacterMovement()->GravityScale = 0.04f;
 					glide = true;
 					glidecheck = false;
@@ -554,6 +556,9 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 				if (GetVelocity().Z < -50.0f && glide) {
 					FVector Force = FVector(0, 0, 700);
 					GetCharacterMovement()->AddImpulse(Force);
+				}
+				if (GetVelocity().Z > 100.0f){
+					GetCharacterMovement()->GravityScale = jump_gravity; //Richard: Doing this to prevent bed/launchers from sending player into space
 				}
 			}
 			else {
