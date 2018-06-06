@@ -80,6 +80,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 
 	//UI
 	MaxHealth = 3;
+	InPan = true;
 	CurrentHealth = 3;
 	MaxWater = 100;
 	CurrentWater = 70;
@@ -115,6 +116,15 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	PepperCheck = false;
 	CanEatCheck = true;
 	FoodCounter = 15;
+	MamaTalkCheck = false;
+	RescueBabyCheck = false;
+	BabyDropCheck = false;
+	MakeNoiseCheck = false;
+	RescueGrandCheck = false;
+	DropGrandCheck = false;
+	KitchenLevelCheck = false;
+	BedroomLevelCheck = false;
+
 
 	//jump setting
 	jump_height = 225.f;
@@ -511,11 +521,13 @@ void AShroommateProtoCharacter::MoveRight(float Value )
 
 void AShroommateProtoCharacter::Flatten(){
 	Crouch();
+	crouched = true;
 	
 	//SetActorRelativeScale3D(oScale * FVector(1.f,1.f,0.5f));
 }
 void AShroommateProtoCharacter::unFlatten() {
 	UnCrouch();
+	crouched = false;
 	GetMesh()->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
 	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 
@@ -537,7 +549,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 		if (Controller != NULL) {
 			if (ischarging || isJumping) {
 				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), GetVelocity().Z));
-				if (GetVelocity().Z < -125.0f && glidecheck) {
+				if (GetVelocity().Z < -125.0f && !PepperCheck) {   //Richard:  Used to be "if (GetVelocity().Z < -125.0f && glidecheck)", changed to allow gliding from holding space off of objects after jump, and making sure pepper still works as intended
 					GetCharacterMovement()->GravityScale = 0.04f;
 					glide = true;
 					glidecheck = false;
@@ -545,6 +557,9 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 				if (GetVelocity().Z < -50.0f && glide) {
 					FVector Force = FVector(0, 0, 700);
 					GetCharacterMovement()->AddImpulse(Force);
+				}
+				if (GetVelocity().Z > 100.0f){
+					GetCharacterMovement()->GravityScale = jump_gravity; //Richard: Doing this to prevent bed/launchers from sending player into space
 				}
 			}
 			else {
@@ -895,6 +910,33 @@ void AShroommateProtoCharacter::setFoodCounter(int FC) {
 	FoodCounter = FC;
 }
 
+void AShroommateProtoCharacter::setMamaTalkCheck(bool MTC) {
+	MamaTalkCheck = MTC;
+}
+void AShroommateProtoCharacter::setRescueBabyCheck(bool RBC) {
+	RescueBabyCheck = RBC;
+}
+void AShroommateProtoCharacter::setBabyDropCheck(bool BDC) {
+	BabyDropCheck = BDC;
+}
+void AShroommateProtoCharacter::setMakeNoiseCheck(bool MNC) {
+	MakeNoiseCheck = MNC;
+}
+void AShroommateProtoCharacter::setRescueGrandCheck(bool RGC) {
+	RescueGrandCheck = RGC;
+}
+void AShroommateProtoCharacter::setDropGrandCheck(bool DGC) {
+	DropGrandCheck = DGC;
+}
+void AShroommateProtoCharacter::setKitchenLevelCheck(bool KLC) {
+	KitchenLevelCheck = KLC;
+}
+void AShroommateProtoCharacter::setBedroomLevelCheck(bool BLC) {
+	BedroomLevelCheck = BLC;
+}
+void AShroommateProtoCharacter::setInPan(bool IP) {
+	InPan = IP;
+}
 
 //UI Getter
 float AShroommateProtoCharacter::getMaxHealth() {
@@ -1005,4 +1047,31 @@ bool AShroommateProtoCharacter::getCanEatCheck() {
 }
 int AShroommateProtoCharacter::getFoodCounter() {
 	return FoodCounter;
+}
+bool AShroommateProtoCharacter::getMamaTalkCheck() {
+	return MamaTalkCheck;
+}
+bool AShroommateProtoCharacter::getRescueBabyCheck() {
+	return RescueBabyCheck;
+}
+bool AShroommateProtoCharacter::getBabyDropCheck() {
+	return BabyDropCheck;
+}
+bool AShroommateProtoCharacter::getMakeNoiseCheck() {
+	return MakeNoiseCheck;
+}
+bool AShroommateProtoCharacter::getRescueGrandCheck() {
+	return RescueGrandCheck;
+}
+bool AShroommateProtoCharacter::getDropGrandCheck() {
+	return DropGrandCheck;
+}
+bool AShroommateProtoCharacter::getKitchenLevelCheck() {
+	return KitchenLevelCheck;
+}
+bool AShroommateProtoCharacter::getBedroomLevelCheck() {
+	return BedroomLevelCheck;
+}
+bool AShroommateProtoCharacter::getInPan() {
+	return InPan;
 }

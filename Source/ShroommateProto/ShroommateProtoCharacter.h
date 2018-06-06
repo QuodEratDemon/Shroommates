@@ -176,6 +176,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		float MaxHealth;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool InPan;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		float CurrentHealth;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		float MaxWater;
@@ -245,6 +247,22 @@ public:
 		bool CanEatCheck;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		int FoodCounter;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)///////////////////////////////////////
+		bool MamaTalkCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool RescueBabyCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool BabyDropCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool MakeNoiseCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool RescueGrandCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool DropGrandCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool KitchenLevelCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool BedroomLevelCheck;
 
 	//jump
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
@@ -291,6 +309,9 @@ public:
 		bool glidecheck;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool glide;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool crouched;
 
 	void Interact();
 	void unInteract();
@@ -367,6 +388,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void SetClimb(bool b);
+	void setInteract(bool in);
+	bool getInteract();
 
 	//UI setter
 	void setMaxHealth(float MH);
@@ -390,7 +413,6 @@ public:
 	void setMin(int min);
 	void setMinTen(int minT);
 	void setTPause(bool TP);
-	//void setJumpCharge(bool JC);
 	void setJumpChrageTimer(float JCT);
 	void setWindowCheck(bool WC);
 	void setDoorCheck(bool DC);
@@ -405,10 +427,15 @@ public:
 	void setPepperCheck(bool PC);
 	void setCanEatCheck(bool CEC);
 	void setFoodCounter(int FC);
-
-	void setInteract(bool in);
-	bool getInteract();
-
+	void setMamaTalkCheck(bool MTC);////////
+	void setRescueBabyCheck(bool RBC);
+	void setBabyDropCheck(bool BDC);
+	void setMakeNoiseCheck(bool MNC);
+	void setRescueGrandCheck(bool RGC);
+	void setDropGrandCheck(bool DGC);
+	void setKitchenLevelCheck(bool KLC);
+	void setBedroomLevelCheck(bool BLC);
+	void setInPan(bool IP);
 	// UI Getter
 	float getMaxHealth();
 	float getCurrentHealth();
@@ -446,6 +473,14 @@ public:
 	bool getPepperCheck();
 	bool getCanEatCheck();
 	int getFoodCounter();
-
+	bool getMamaTalkCheck();////////
+	bool getRescueBabyCheck();
+	bool getBabyDropCheck();
+	bool getMakeNoiseCheck();
+	bool getRescueGrandCheck();
+	bool getDropGrandCheck();
+	bool getKitchenLevelCheck();
+	bool getBedroomLevelCheck();
+	bool getInPan();
 };
 
