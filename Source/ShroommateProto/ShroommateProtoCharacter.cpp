@@ -134,7 +134,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	GetCharacterMovement()->JumpZVelocity = jump_height;
 	GetCharacterMovement()->AirControl = jump_control;
 	GetCharacterMovement()->GravityScale = jump_gravity;
-	GetCharacterMovement()->MaxAcceleration = 350.0f;
+	GetCharacterMovement()->MaxAcceleration = 550.0f;
 
 	canclimb = false;
 	walkagain = false;
@@ -542,12 +542,18 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 
 	CheckForInteractable();
 
+	if (a) {
+		isHolding = a->haskitchenitem;
+	}
 	
 	//Gliding
-	if (GetCharacterMovement()->MovementMode == MOVE_Falling) {
+	if (GetCharacterMovement()->MovementMode == MOVE_Falling && !isHolding) {
 		ASkillTreeController* Controller = Cast<ASkillTreeController>(GetController());
-		if (Controller != NULL) {
-			if (ischarging || isJumping) {
+
+		
+
+		if (Controller != NULL  ) {
+			if ((ischarging || isJumping) ){
 				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("%f"), GetVelocity().Z));
 				if (GetVelocity().Z < -125.0f && !PepperCheck) {   //Richard:  Used to be "if (GetVelocity().Z < -125.0f && glidecheck)", changed to allow gliding from holding space off of objects after jump, and making sure pepper still works as intended
 					GetCharacterMovement()->GravityScale = 0.04f;
@@ -590,10 +596,22 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 
 	if (ischarging && !glide) {
 		if (chargeInterval >= 0.125f) {
-			if (GetCharacterMovement()->JumpZVelocity <= 325.f) {
-				GetCharacterMovement()->JumpZVelocity += chargeLevel;
+			if (GetActorScale().X > 0.05f ) {
+				if (GetCharacterMovement()->JumpZVelocity <= 650.f) {
+					GetCharacterMovement()->JumpZVelocity += chargeLevel*2;
 
+
+				}
+				print("big boi");
 			}
+			else {
+				if (GetCharacterMovement()->JumpZVelocity <= 325.f) {
+					GetCharacterMovement()->JumpZVelocity += chargeLevel;
+
+
+				}
+			}
+			
 			chargeInterval = 0.f;
 		}
 		else {
