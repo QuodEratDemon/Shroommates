@@ -80,6 +80,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 
 	//UI
 	MaxHealth = 3;
+	InPan = true;
 	CurrentHealth = 3;
 	MaxWater = 100;
 	CurrentWater = 70;
@@ -933,7 +934,9 @@ void AShroommateProtoCharacter::setKitchenLevelCheck(bool KLC) {
 void AShroommateProtoCharacter::setBedroomLevelCheck(bool BLC) {
 	BedroomLevelCheck = BLC;
 }
-
+void AShroommateProtoCharacter::setInPan(bool IP) {
+	InPan = IP;
+}
 
 //UI Getter
 float AShroommateProtoCharacter::getMaxHealth() {
@@ -1068,4 +1071,7 @@ bool AShroommateProtoCharacter::getKitchenLevelCheck() {
 }
 bool AShroommateProtoCharacter::getBedroomLevelCheck() {
 	return BedroomLevelCheck;
+}
+bool AShroommateProtoCharacter::getInPan() {
+	return InPan;
 }
