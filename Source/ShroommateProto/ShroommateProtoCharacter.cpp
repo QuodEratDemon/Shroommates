@@ -861,7 +861,7 @@ void AShroommateProtoCharacter::setSecTen(int secT) {
 void AShroommateProtoCharacter::setMin(int min) {
 	Min = min;
 }
-void AShroommateProtoCharacter::setMinTen(int minT) {
+void AShroommateProtoCharacter::setMinTen(float minT) {
 	MinTen = minT;
 }
 void AShroommateProtoCharacter::setTPause(bool TP) {
@@ -996,7 +996,7 @@ int AShroommateProtoCharacter::getSecTen(){
 int AShroommateProtoCharacter::getMin() {
 	return Min;
 }
-int AShroommateProtoCharacter::getMinTen() {
+float AShroommateProtoCharacter::getMinTen() {
 	return MinTen;
 }
 bool AShroommateProtoCharacter::getTPause() {
