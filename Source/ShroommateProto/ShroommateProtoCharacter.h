@@ -277,6 +277,7 @@ public:
 	float chargeInterval = 0.f;
 
 	bool isJumping = false;
+	bool isHolding = false;
 
 	UParticleSystemComponent* help;
 
