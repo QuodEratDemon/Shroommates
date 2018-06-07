@@ -176,6 +176,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		float MaxHealth;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool InPan;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		float CurrentHealth;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		float MaxWater;
@@ -433,6 +435,7 @@ public:
 	void setDropGrandCheck(bool DGC);
 	void setKitchenLevelCheck(bool KLC);
 	void setBedroomLevelCheck(bool BLC);
+	void setInPan(bool IP);
 	// UI Getter
 	float getMaxHealth();
 	float getCurrentHealth();
@@ -478,5 +481,6 @@ public:
 	bool getDropGrandCheck();
 	bool getKitchenLevelCheck();
 	bool getBedroomLevelCheck();
+	bool getInPan();
 };
 
