@@ -246,7 +246,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool CanEatCheck;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-		int FoodCounter;
+		float FoodCounter;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)///////////////////////////////////////
 		bool MamaTalkCheck;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
@@ -427,7 +427,7 @@ public:
 	void setSoapCheck(bool SoapC);
 	void setPepperCheck(bool PC);
 	void setCanEatCheck(bool CEC);
-	void setFoodCounter(int FC);
+	void setFoodCounter(float FC);
 	void setMamaTalkCheck(bool MTC);////////
 	void setRescueBabyCheck(bool RBC);
 	void setBabyDropCheck(bool BDC);
@@ -473,7 +473,7 @@ public:
 	bool getSoapCheck();
 	bool getPepperCheck();
 	bool getCanEatCheck();
-	int getFoodCounter();
+	float getFoodCounter();
 	bool getMamaTalkCheck();////////
 	bool getRescueBabyCheck();
 	bool getBabyDropCheck();
