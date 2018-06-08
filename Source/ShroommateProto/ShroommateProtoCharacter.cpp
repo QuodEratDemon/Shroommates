@@ -924,7 +924,7 @@ void AShroommateProtoCharacter::setPepperCheck(bool PC) {
 void AShroommateProtoCharacter::setCanEatCheck(bool CEC) {
 	CanEatCheck = CEC;
 }
-void AShroommateProtoCharacter::setFoodCounter(int FC) {
+void AShroommateProtoCharacter::setFoodCounter(float FC) {
 	FoodCounter = FC;
 }
 
@@ -1063,7 +1063,7 @@ bool AShroommateProtoCharacter::getPepperCheck() {
 bool AShroommateProtoCharacter::getCanEatCheck() {
 	return CanEatCheck;
 }
-int AShroommateProtoCharacter::getFoodCounter() {
+float AShroommateProtoCharacter::getFoodCounter() {
 	return FoodCounter;
 }
 bool AShroommateProtoCharacter::getMamaTalkCheck() {
