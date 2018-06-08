@@ -124,6 +124,9 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	DropGrandCheck = false;
 	KitchenLevelCheck = false;
 	BedroomLevelCheck = false;
+	TalkMamaCheck = false;
+	TalkRatCheck = false;
+	LightCheck = false;
 
 
 	//jump setting
@@ -927,7 +930,6 @@ void AShroommateProtoCharacter::setCanEatCheck(bool CEC) {
 void AShroommateProtoCharacter::setFoodCounter(float FC) {
 	FoodCounter = FC;
 }
-
 void AShroommateProtoCharacter::setMamaTalkCheck(bool MTC) {
 	MamaTalkCheck = MTC;
 }
@@ -955,7 +957,15 @@ void AShroommateProtoCharacter::setBedroomLevelCheck(bool BLC) {
 void AShroommateProtoCharacter::setInPan(bool IP) {
 	InPan = IP;
 }
-
+void AShroommateProtoCharacter::setTalkMamaCheck(bool TMC) {
+	TalkMamaCheck = TMC;
+}
+void AShroommateProtoCharacter::setTalkRatCheck(bool TRC) {
+	TalkRatCheck = TRC;
+}
+void AShroommateProtoCharacter::setLightCheck(bool LC) {
+	LightCheck = LC;
+}
 //UI Getter
 float AShroommateProtoCharacter::getMaxHealth() {
 	return MaxHealth;
@@ -1092,4 +1102,13 @@ bool AShroommateProtoCharacter::getBedroomLevelCheck() {
 }
 bool AShroommateProtoCharacter::getInPan() {
 	return InPan;
+}
+bool AShroommateProtoCharacter::getTalkMamaCheck() {
+	return TalkMamaCheck;
+}
+bool AShroommateProtoCharacter::getTalkRatCheck() {
+	return TalkRatCheck;
+}
+bool AShroommateProtoCharacter::getLightCheck() {
+	return LightCheck;
 }

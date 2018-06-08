@@ -263,6 +263,14 @@ public:
 		bool KitchenLevelCheck;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool BedroomLevelCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool TalkMamaCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool TalkRatCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool LightCheck;
+
+
 
 	//jump
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
@@ -437,6 +445,10 @@ public:
 	void setKitchenLevelCheck(bool KLC);
 	void setBedroomLevelCheck(bool BLC);
 	void setInPan(bool IP);
+	void setTalkMamaCheck(bool TMC);
+	void setTalkRatCheck(bool TRC);
+	void setLightCheck(bool LC);
+
 	// UI Getter
 	float getMaxHealth();
 	float getCurrentHealth();
@@ -483,5 +495,8 @@ public:
 	bool getKitchenLevelCheck();
 	bool getBedroomLevelCheck();
 	bool getInPan();
+	bool getTalkMamaCheck();
+	bool getTalkRatCheck();
+	bool getLightCheck();
 };
 
