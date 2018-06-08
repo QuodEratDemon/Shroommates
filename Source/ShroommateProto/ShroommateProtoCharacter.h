@@ -214,7 +214,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		int Min;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-		int MinTen;
+		float MinTen;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool TPause;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
@@ -277,6 +277,7 @@ public:
 	float chargeInterval = 0.f;
 
 	bool isJumping = false;
+	bool isHolding = false;
 
 	UParticleSystemComponent* help;
 
@@ -411,7 +412,7 @@ public:
 	void setSec(int sec);
 	void setSecTen(int secT);
 	void setMin(int min);
-	void setMinTen(int minT);
+	void setMinTen(float minT);
 	void setTPause(bool TP);
 	void setJumpChrageTimer(float JCT);
 	void setWindowCheck(bool WC);
@@ -456,7 +457,7 @@ public:
 	int getSec();
 	int getSecTen();
 	int getMin();
-	int getMinTen();
+	float getMinTen();
 	bool getTPause();
 	bool getJumpCharge();
 	float getJumpChrageTimer();
