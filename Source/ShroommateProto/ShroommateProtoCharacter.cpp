@@ -605,7 +605,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 
 
 				}
-				print("big boi");
+				// print("big boi");
 			}
 			else {
 				if (GetCharacterMovement()->JumpZVelocity <= 325.f) {
