@@ -81,7 +81,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	//UI
 	MaxHealth = 3;
 	InPan = true;
-	CurrentHealth = 3;
+	CurrentHealth = 2;
 	MaxWater = 100;
 	CurrentWater = 70;
 	Currency = 0;
