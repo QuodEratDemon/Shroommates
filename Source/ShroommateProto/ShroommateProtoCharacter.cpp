@@ -81,7 +81,7 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	//UI
 	MaxHealth = 3;
 	InPan = true;
-	CurrentHealth = 3;
+	CurrentHealth = 2;
 	MaxWater = 100;
 	CurrentWater = 70;
 	Currency = 0;
@@ -124,6 +124,9 @@ AShroommateProtoCharacter::AShroommateProtoCharacter()
 	DropGrandCheck = false;
 	KitchenLevelCheck = false;
 	BedroomLevelCheck = false;
+	TalkMamaCheck = false;
+	TalkRatCheck = false;
+	LightCheck = false;
 
 
 	//jump setting
@@ -602,7 +605,7 @@ void AShroommateProtoCharacter::Tick(float DeltaTime)
 
 
 				}
-				print("big boi");
+				// print("big boi");
 			}
 			else {
 				if (GetCharacterMovement()->JumpZVelocity <= 325.f) {
@@ -924,10 +927,9 @@ void AShroommateProtoCharacter::setPepperCheck(bool PC) {
 void AShroommateProtoCharacter::setCanEatCheck(bool CEC) {
 	CanEatCheck = CEC;
 }
-void AShroommateProtoCharacter::setFoodCounter(int FC) {
+void AShroommateProtoCharacter::setFoodCounter(float FC) {
 	FoodCounter = FC;
 }
-
 void AShroommateProtoCharacter::setMamaTalkCheck(bool MTC) {
 	MamaTalkCheck = MTC;
 }
@@ -955,7 +957,15 @@ void AShroommateProtoCharacter::setBedroomLevelCheck(bool BLC) {
 void AShroommateProtoCharacter::setInPan(bool IP) {
 	InPan = IP;
 }
-
+void AShroommateProtoCharacter::setTalkMamaCheck(bool TMC) {
+	TalkMamaCheck = TMC;
+}
+void AShroommateProtoCharacter::setTalkRatCheck(bool TRC) {
+	TalkRatCheck = TRC;
+}
+void AShroommateProtoCharacter::setLightCheck(bool LC) {
+	LightCheck = LC;
+}
 //UI Getter
 float AShroommateProtoCharacter::getMaxHealth() {
 	return MaxHealth;
@@ -1063,7 +1073,7 @@ bool AShroommateProtoCharacter::getPepperCheck() {
 bool AShroommateProtoCharacter::getCanEatCheck() {
 	return CanEatCheck;
 }
-int AShroommateProtoCharacter::getFoodCounter() {
+float AShroommateProtoCharacter::getFoodCounter() {
 	return FoodCounter;
 }
 bool AShroommateProtoCharacter::getMamaTalkCheck() {
@@ -1092,4 +1102,13 @@ bool AShroommateProtoCharacter::getBedroomLevelCheck() {
 }
 bool AShroommateProtoCharacter::getInPan() {
 	return InPan;
+}
+bool AShroommateProtoCharacter::getTalkMamaCheck() {
+	return TalkMamaCheck;
+}
+bool AShroommateProtoCharacter::getTalkRatCheck() {
+	return TalkRatCheck;
+}
+bool AShroommateProtoCharacter::getLightCheck() {
+	return LightCheck;
 }

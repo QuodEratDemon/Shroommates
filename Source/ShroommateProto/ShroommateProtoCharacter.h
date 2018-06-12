@@ -246,7 +246,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool CanEatCheck;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
-		int FoodCounter;
+		float FoodCounter;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)///////////////////////////////////////
 		bool MamaTalkCheck;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
@@ -263,6 +263,14 @@ public:
 		bool KitchenLevelCheck;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
 		bool BedroomLevelCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool TalkMamaCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool TalkRatCheck;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
+		bool LightCheck;
+
+
 
 	//jump
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera)
@@ -427,7 +435,7 @@ public:
 	void setSoapCheck(bool SoapC);
 	void setPepperCheck(bool PC);
 	void setCanEatCheck(bool CEC);
-	void setFoodCounter(int FC);
+	void setFoodCounter(float FC);
 	void setMamaTalkCheck(bool MTC);////////
 	void setRescueBabyCheck(bool RBC);
 	void setBabyDropCheck(bool BDC);
@@ -437,6 +445,10 @@ public:
 	void setKitchenLevelCheck(bool KLC);
 	void setBedroomLevelCheck(bool BLC);
 	void setInPan(bool IP);
+	void setTalkMamaCheck(bool TMC);
+	void setTalkRatCheck(bool TRC);
+	void setLightCheck(bool LC);
+
 	// UI Getter
 	float getMaxHealth();
 	float getCurrentHealth();
@@ -473,7 +485,7 @@ public:
 	bool getSoapCheck();
 	bool getPepperCheck();
 	bool getCanEatCheck();
-	int getFoodCounter();
+	float getFoodCounter();
 	bool getMamaTalkCheck();////////
 	bool getRescueBabyCheck();
 	bool getBabyDropCheck();
@@ -483,5 +495,8 @@ public:
 	bool getKitchenLevelCheck();
 	bool getBedroomLevelCheck();
 	bool getInPan();
+	bool getTalkMamaCheck();
+	bool getTalkRatCheck();
+	bool getLightCheck();
 };
 
